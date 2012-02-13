@@ -20,22 +20,22 @@ SET(similarity_SRCS
    main.similarity.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/similarity.cpp ${CMAKE_SOURCE_DIR}/src/tfidf.cpp 
 )
 
-SET(similarityBySentence_SRCS
-   main.similarityBySentence.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/similarity.cpp ${CMAKE_SOURCE_DIR}/src/tfidf.cpp 
-)
+#SET(similarityBySentence_SRCS
+#   main.similarityBySentence.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/similarity.cpp ${CMAKE_SOURCE_DIR}/src/tfidf.cpp 
+#)
 
-SET(filterPhraseTable_SRCS
-  main.filterPhraseTable.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/phrase.cpp ${CMAKE_SOURCE_DIR}/src/ptable.cpp
-)
-SET(addTranslations_SRCS
-  main.addTranslations.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/phrase.cpp ${CMAKE_SOURCE_DIR}/src/ptable.cpp
-)
-SET(extractTranslations_SRCS
-  main.extractTranslations.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/phrase.cpp ${CMAKE_SOURCE_DIR}/src/ptable.cpp ${CMAKE_SOURCE_DIR}/src/similarity.cpp ${CMAKE_SOURCE_DIR}/src/tfidf.cpp 
-)
-SET(extractTranslationsFromAlignments_SRCS
-  main.extractTranslationsFromAlignments.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/phrase.cpp ${CMAKE_SOURCE_DIR}/src/ptable.cpp ${CMAKE_SOURCE_DIR}/src/similarity.cpp ${CMAKE_SOURCE_DIR}/src/tfidf.cpp 
-)
+#SET(filterPhraseTable_SRCS
+#  main.filterPhraseTable.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/phrase.cpp ${CMAKE_SOURCE_DIR}/src/ptable.cpp
+#)
+#SET(addTranslations_SRCS
+#  main.addTranslations.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/phrase.cpp ${CMAKE_SOURCE_DIR}/src/ptable.cpp
+#)
+#SET(extractTranslations_SRCS
+#  main.extractTranslations.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/phrase.cpp ${CMAKE_SOURCE_DIR}/src/ptable.cpp ${CMAKE_SOURCE_DIR}/src/similarity.cpp ${CMAKE_SOURCE_DIR}/src/tfidf.cpp 
+#)
+#SET(extractTranslationsFromAlignments_SRCS
+#  main.extractTranslationsFromAlignments.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/phrase.cpp ${CMAKE_SOURCE_DIR}/src/ptable.cpp ${CMAKE_SOURCE_DIR}/src/similarity.cpp ${CMAKE_SOURCE_DIR}/src/tfidf.cpp 
+#)
 # SET(extractAndDetectOOV_SRCS
 #    main.extract_and_detect.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/hashMap.cpp ${CMAKE_SOURCE_DIR}/src/stringHasher.cpp ${CMAKE_SOURCE_DIR}/src/hashMapStringInfos.cpp ${CMAKE_SOURCE_DIR}/src/stringInfosHasher.cpp  
 # )
@@ -46,21 +46,21 @@ SET(extractTranslationsFromAlignments_SRCS
 #target_link_libraries(tfidf.0.1  boost_regex boost_system boost_filesystem)
 
 add_executable(similarity.0.4 ${similarity_SRCS})
-add_executable(similarityBySentence.0.1 ${similarityBySentence_SRCS})
-add_executable(filterPhraseTable.0.1 ${filterPhraseTable_SRCS})
-add_executable(addTranslations.0.1 ${addTranslations_SRCS})
-add_executable(extractTranslations.0.1 ${extractTranslations_SRCS})
-add_executable(extractTranslationsFromAlignments.0.1 ${extractTranslationsFromAlignments_SRCS})
-target_link_libraries(similarityBySentence.0.1  boost_regex boost_system boost_filesystem boost_iostreams)
+#add_executable(similarityBySentence.0.1 ${similarityBySentence_SRCS})
+#add_executable(filterPhraseTable.0.1 ${filterPhraseTable_SRCS})
+#add_executable(addTranslations.0.1 ${addTranslations_SRCS})
+#add_executable(extractTranslations.0.1 ${extractTranslations_SRCS})
+#add_executable(extractTranslationsFromAlignments.0.1 ${extractTranslationsFromAlignments_SRCS})
+#target_link_libraries(similarityBySentence.0.1  boost_regex boost_system boost_filesystem boost_iostreams)
 target_link_libraries(similarity.0.4  boost_regex boost_system boost_filesystem boost_iostreams)
-target_link_libraries(addTranslations.0.1  boost_regex boost_system boost_filesystem boost_iostreams)
-target_link_libraries(filterPhraseTable.0.1 boost_regex boost_system boost_filesystem boost_iostreams)
-target_link_libraries(extractTranslations.0.1  boost_regex boost_system boost_filesystem boost_iostreams)
-target_link_libraries(extractTranslationsFromAlignments.0.1 boost_regex boost_system boost_filesystem boost_iostreams)
+#target_link_libraries(addTranslations.0.1  boost_regex boost_system boost_filesystem boost_iostreams)
+#target_link_libraries(filterPhraseTable.0.1 boost_regex boost_system boost_filesystem boost_iostreams)
+#target_link_libraries(extractTranslations.0.1  boost_regex boost_system boost_filesystem boost_iostreams)
+#target_link_libraries(extractTranslationsFromAlignments.0.1 boost_regex boost_system boost_filesystem boost_iostreams)
 # target_link_libraries(lemmatize.0.1)
 # target_link_libraries(extractAndDetectOOV  boost_regex)
 
 # install(TARGETS extractAndDetectOOV detectWords.0.5 filteringOutputs extractDictionnary DESTINATION bin)
-install(TARGETS extractTranslationsFromAlignments.0.1 extractTranslations.0.1 similarityBySentence.0.1 addTranslations.0.1 similarity.0.4 filterPhraseTable.0.1 DESTINATION bin)
+install(TARGETS similarity.0.4 DESTINATION bin)
 
 
