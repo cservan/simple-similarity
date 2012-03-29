@@ -707,5 +707,46 @@ namespace Tools
 	boost::hash<string> hasher;
 	return hasher ( s );
     }
+//     map_hashIndex Tools::index(vector< string > vec)
+//     {
+// 	map_hashIndex to_return;
+// 	unsigned long doc=1;
+//         for ( vector<string>::iterator vecIter = vec.begin();vecIter != vec.end(); vecIter++ )
+//         {
+// 	  map_hashIndex tmp_to_return;
+// 	  size_t hashValue=hashValueBoost((*vecIter));
+// 	  hash_mapIndex::iterator it=tmp_to_return.find(hashValue);
+// 	  if (it!=multimap::end)
+// 	  {
+// 	      map_countPerDoc::iterator it2=it->second.find(doc);
+// 	      if (it2!=multimap::end)
+// 	      {
+// 		  it2.second++;
+// 	      }
+// 	      else
+// 	      {
+// 		  pair_countPerDoc tmp(doc,1);
+// // 		  tmp=new pair_countPerDoc(doc,1);
+// 		  it->second->insert(tmp);
+// 	      }
+// 	  }
+// 	  else
+// 	  {
+// 	      pair_countPerDoc tmp_pair(doc,1);
+// 	      map_countPerDoc tmp_map;
+// 	      tmp_map.insert(tmp_pair);
+// 	      pair_hashInfo tmp_pair2(hashValue,tmp_map);
+// 	      map_hashIndex.insert(tmp_pair2);
+// 	  }
+// 	  for (it=tmp_to_return.begin(); it!=tmp_to_return.end(); it++)
+// 	  {
+// 	      hash_mapIndex::iterator research=to_return.find(it->first);
+// 	      
+// 	    
+// 	  }
+// 	  doc++;
+// 	}
+// 	
+//     }
 
 }

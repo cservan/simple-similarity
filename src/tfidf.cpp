@@ -23,7 +23,7 @@ bool mySortingFunction ( const pair<size_t, string>& i, const pair<size_t, strin
     return true;
 // 	return j.second < i.second;
 }
-bool mySortingFunction2 ( const pair <size_t, vector <int> >& i, const pair <size_t, vector <int> >& j )
+bool mySortingFunction2 ( const pair <size_t, vector <unsigned long> >& i, const pair <size_t, vector <unsigned long> >& j )
 {
     if ( i.first > j.first ) return false;
     if ( j.first >= i.first ) return true;
@@ -155,10 +155,10 @@ void tfidf::addDatas ( vector< string > s, int ngramSize )
                     {
                         pair <size_t, string> l_pair ( l_ngramHash, l_ngram_test );
                         pair <size_t, int> l_pairNgramInfos ( l_ngramHash, l_ngram );
-                        vector <int> l_count ( m_documentSize + 1 );
+                        vector <unsigned long> l_count ( m_documentSize + 1 );
                         l_count.at ( 0 ) = 1;
                         l_count.at ( incFile + 1 ) = 1;
-                        pair <size_t, vector<int> > l_pairCount ( l_ngramHash, l_count );
+                        pair <size_t, vector<unsigned long> > l_pairCount ( l_ngramHash, l_count );
                         m_tester.push_back ( l_ngramHash );
                         m_testerContent.push_back ( l_pair );
                         m_testerCount.push_back ( l_pairCount );
@@ -180,6 +180,172 @@ void tfidf::addDatas ( vector< string > s, int ngramSize )
         }
 
     }
+    m_ngramCount = cpt_ngramVec;
+}
+
+
+void tfidf::addDatas(myIndex & query, myIndex & l_index, int ngramSize, unsigned long docNbr)
+{
+  
+    int incFile = 0;
+//     vector <string> vecInputs = stringToVector ( inputs, " " );
+    m_documentSize = docNbr;
+    int l_ngram = ngramSize;
+    vector<int> cpt_ngramVec ( ngramSize + 1 );
+    cerr << "Load Input...";
+//     cerr << "DATA :" << endl << query.toString() <<endl;
+    multimap< size_t, multimap< unsigned long, unsigned long >  > & query_map = query.getMyIndex();
+    multimap< size_t, multimap< unsigned long, unsigned long >  >::iterator l_it;
+//     cerr << "coucou " << query_map.size()<<endl; 
+    for (l_it=query_map.begin();l_it!=query_map.end();l_it++)
+    {
+	pair <size_t, int> l_pairNgramInfos ( (*l_it).first, ngramSize );
+	vector <unsigned long> l_count ( m_documentSize + 1 ,0);
+	l_count.at ( 0 ) = 1;
+// 	l_count.at ( incFile + 1 ) = 1;
+	multimap< unsigned long, unsigned long > ::iterator l_l_it;
+// 	(*l_it).
+// 	cerr << "Taille : "<<(*l_it).second.size()<<endl;
+	multimap< unsigned long, unsigned long > & element=(*l_it).second;
+	multimap< unsigned long, unsigned long > ::iterator it2;
+// 	cerr << "TAILLE : "<<element.size()<<endl;
+// 	element.begin()
+// 	for (it2= element.begin();it2!=element.end(); it2++)
+// 	{
+// 	    cerr  << "\t\t"<< (*it2).first <<" | "<<(*it2).second<<endl;
+// 	}
+	int cpt_tmp=0;
+	l_count.at(0)=(*(element.begin())).second;
+// 	for (l_l_it=(*l_it).second.begin();l_l_it!=(*l_it).second.end();l_l_it++)
+// 	{
+// 	    cerr << cpt_tmp <<endl;
+// 	    cpt_tmp++;
+// 	    cerr << ((*l_l_it).first) << " | ";
+// 	    cerr << ((*l_l_it).second) << endl;
+// 	    l_count.at((int)((*l_l_it).first)+1)=(*l_l_it).second;
+// 	    l_count.at(0)=(*l_l_it).second;
+// 	}
+	pair <size_t, vector<unsigned long> > l_pairCount ( (*l_it).first, l_count );
+	m_tester.push_back ( (*l_it).first );
+	m_testerCount.push_back ( l_pairCount );
+	m_testerNgramInfos.push_back ( l_pairNgramInfos );
+    }
+    multimap< size_t, string >::iterator l_it2;
+    for (l_it2=query.getMyIndexMapInfo().begin();l_it2!=query.getMyIndexMapInfo().end();l_it2++)
+    {
+	pair <size_t, string> l_pair ( (*l_it2).first, (*l_it2).second );
+	m_testerContent.push_back ( l_pair );
+    }
+    sortHash();
+//     return;
+    cerr << "Load data...";
+    multimap<unsigned long , multimap <size_t , unsigned long  > >  & data_reverse_map = l_index.getMyReverseIndex();
+    multimap<unsigned long , multimap <size_t , unsigned long  > > ::iterator l_rit;
+    for (l_rit=data_reverse_map.begin();l_rit!=data_reverse_map.end();l_rit++)
+    {
+	incFile=(*l_rit).first;
+	int cpt_ngram=(int)(*l_rit).second.size();
+	vector < pair< size_t, string > > ::iterator it;
+	for (it= m_testerContent.begin();it!=m_testerContent.end(); it++)
+	{
+	    unsigned long value = l_index.getReversInfos(incFile,(*it).first);
+	    int l_pairPos = donnerPos ( (*it).first);
+	    m_testerCount.at ( l_pairPos ).second.at ( 0 ) = m_testerCount.at ( l_pairPos ).second.at ( 0 ) + value;
+	    m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) = m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) + value;
+	}
+	cpt_ngramVec.at ( l_ngram ) = cpt_ngramVec.at ( l_ngram ) + cpt_ngram;
+    }    
+// 	    unsigned long value = l_index.getReversInfos(incFile,(*it).first);
+// 	    cerr << l_pairPos << "|" << (int)m_testerCount.size() << "|" << (int)m_testerCount.at ( l_pairPos ).second.size() << endl;
+    
+// 	    m_testerCount.at ( l_pairPos ).second.at ( 0 ) = m_testerCount.at ( l_pairPos ).second.at ( 0 ) + 1;
+// 	    m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) = m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) + 1;
+    
+//     for ( incFile = 0; incFile < ( int ) cpt_ngramVec.size() ; incFile++ )
+//     {
+//         cpt_ngramVec.at ( incFile ) = 0;
+//     }
+    
+//     multimap<unsigned long , multimap <size_t , unsigned long  > > ::iterator l_r_it;
+    
+//     for (l_r_it=query.getMyReverseIndex().begin();l_r_it!=query.getMyReverseIndex().end();l_r_it++)
+//     {
+	
+// 	if ( !chercher ( l_ngramHash ) )
+// 	{
+	    // 			pair <size_t,string> l_pair(l_ngramHash,l_ngram_test);
+	    // 			pair <size_t,int> l_pairNgramInfos(l_ngramHash,l_ngram);
+	    // 			vector <unsigned long> l_count(m_documentSize+1);
+	    // 			l_count.at(0)=1;
+	    // 			l_count.at(incFile+1)=1;
+	    // 			pair <size_t,vector<int> > l_pairCount(l_ngramHash,l_count);
+	    // 			m_tester.push_back(l_ngramHash);
+	    // 			m_testerContent.push_back(l_pair);
+	    // 			m_testerCount.push_back(l_pairCount);
+	    // 			m_testerNgramInfos.push_back(l_pairNgramInfos);
+	    // 			sortHash();
+	    // // 			cerr << "\""<<l_ngram_test << "\" a été ajouté" << endl;
+// 	}
+// 	else
+// 	{
+	    // 			cerr << "on cherche  "<< l_ngram_test << endl;
+// 	    int l_pairPos = donnerPos ( l_ngramHash );
+// 	    m_testerCount.at ( l_pairPos ).second.at ( 0 ) = m_testerCount.at ( l_pairPos ).second.at ( 0 ) + 1;
+// 	    m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) = m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) + 1;
+// 	}
+      
+//     }
+//     for ( incFile = 0; incFile < m_documentSize; incFile++ )
+//     {
+//         cerr << ".";
+// // 	cerr << "document "<< incFile <<endl;
+//         vector<string> sentence = stringToVector ( tokenizePunct ( data.at ( incFile ) ), " " );
+// 	if ((int)sentence.size()>ngramSize)
+// 	{
+// 	    for ( int l_ngram = 1; l_ngram <= ngramSize; l_ngram++ )
+// 	    {
+// 		int cpt_ngram = 0;
+// 		for ( int l_pos = 0; l_pos + l_ngram <= ( int ) sentence.size(); l_pos++ )
+// 		{
+// 		    cpt_ngram++;
+// 		    if (l_ngram==ngramSize)
+// 		    {
+// 			string l_ngram_test = vectorToString ( subVector ( sentence, l_pos, l_pos + l_ngram ), " " );
+// 			size_t l_ngramHash = hashValueBoost ( l_ngram_test );
+// // 			cerr << "On traite "<< l_ngram_test <<endl;
+// 			if ( l_ngramHash != 0 )
+// 			{
+// 			    if ( !chercher ( l_ngramHash ) )
+// 			    {
+// 				// 			pair <size_t,string> l_pair(l_ngramHash,l_ngram_test);
+// 				// 			pair <size_t,int> l_pairNgramInfos(l_ngramHash,l_ngram);
+// 				// 			vector <unsigned long> l_count(m_documentSize+1);
+// 				// 			l_count.at(0)=1;
+// 				// 			l_count.at(incFile+1)=1;
+// 				// 			pair <size_t,vector<int> > l_pairCount(l_ngramHash,l_count);
+// 				// 			m_tester.push_back(l_ngramHash);
+// 				// 			m_testerContent.push_back(l_pair);
+// 				// 			m_testerCount.push_back(l_pairCount);
+// 				// 			m_testerNgramInfos.push_back(l_pairNgramInfos);
+// 				// 			sortHash();
+// 				// // 			cerr << "\""<<l_ngram_test << "\" a été ajouté" << endl;
+// 			    }
+// 			    else
+// 			    {
+// 				// 			cerr << "on cherche  "<< l_ngram_test << endl;
+// 				int l_pairPos = donnerPos ( l_ngramHash );
+// 				m_testerCount.at ( l_pairPos ).second.at ( 0 ) = m_testerCount.at ( l_pairPos ).second.at ( 0 ) + 1;
+// 				m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) = m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) + 1;
+// 			    }
+// 			}
+// 		    }
+// 		}
+//     // 		cerr << "on arrive ici"  <<endl;
+// 		cpt_ngramVec.at ( l_ngram ) = cpt_ngramVec.at ( l_ngram ) + cpt_ngram;
+// 	    }
+// 	}
+//     }
+    cerr << ".OK!"<<endl;
     m_ngramCount = cpt_ngramVec;
 }
 
@@ -207,10 +373,10 @@ void tfidf::addDatas ( string inputs, vector< string > data, int ngramSize )
 		    {
 			pair <size_t, string> l_pair ( l_ngramHash, l_ngram_test );
 			pair <size_t, int> l_pairNgramInfos ( l_ngramHash, l_ngram );
-			vector <int> l_count ( m_documentSize + 1 );
+			vector <unsigned long> l_count ( m_documentSize + 1 );
 			l_count.at ( 0 ) = 1;
 			l_count.at ( incFile + 1 ) = 1;
-			pair <size_t, vector<int> > l_pairCount ( l_ngramHash, l_count );
+			pair <size_t, vector<unsigned long> > l_pairCount ( l_ngramHash, l_count );
 			m_tester.push_back ( l_ngramHash );
 			m_testerContent.push_back ( l_pair );
 			m_testerCount.push_back ( l_pairCount );
@@ -262,7 +428,7 @@ void tfidf::addDatas ( string inputs, vector< string > data, int ngramSize )
 			    {
 				// 			pair <size_t,string> l_pair(l_ngramHash,l_ngram_test);
 				// 			pair <size_t,int> l_pairNgramInfos(l_ngramHash,l_ngram);
-				// 			vector <int> l_count(m_documentSize+1);
+				// 			vector <unsigned long> l_count(m_documentSize+1);
 				// 			l_count.at(0)=1;
 				// 			l_count.at(incFile+1)=1;
 				// 			pair <size_t,vector<int> > l_pairCount(l_ngramHash,l_count);
@@ -303,7 +469,7 @@ string tfidf::printDatas()
     for ( int l_pos = 0; l_pos < ( int ) m_tester.size(); l_pos++ )
     {
         s << l_pos << "\t" << m_tester.at ( l_pos ) << "\t" << m_testerContent.at ( l_pos ).second ;
-        vector <int>l_int = m_testerCount.at ( l_pos ).second;
+        vector <unsigned long>l_int = m_testerCount.at ( l_pos ).second;
 //	    for (int i=0; i< (int)l_int.size(); i++)
 //	    {
 //		s  << "\t" << l_int.at(i);
@@ -337,7 +503,7 @@ string tfidf::printDatasSorted()
     for ( int l_pos = 0; l_pos < ( int ) m_tester.size(); l_pos++ )
     {
         s << l_pos << "\t" << m_tester.at ( l_pos ) << "\t" << m_testerContent.at ( l_pos ).second ;
-        vector <int>l_int = m_testerCount.at ( l_pos ).second;
+        vector <unsigned long>l_int = m_testerCount.at ( l_pos ).second;
 //	    for (int i=0; i< (int)l_int.size(); i++)
 //	    {
 //		s  << "\t" << l_int.at(i);
@@ -392,16 +558,82 @@ string tfidf::printDatasSorted()
     return s.str();
 }
 
+string tfidf::printDatasSorted(int nbest)
+{
+    stringstream s;
+    m_vec_infos_pairs.clear();
+// 	vector<pair <string, vector<float> > > vec_infos_pairs;
+    for ( int l_pos = 0; l_pos < ( int ) m_tester.size(); l_pos++ )
+    {
+        s << l_pos << "\t" << m_tester.at ( l_pos ) << "\t" << m_testerContent.at ( l_pos ).second ;
+        vector <unsigned long>l_int = m_testerCount.at ( l_pos ).second;
+//	    for (int i=0; i< (int)l_int.size(); i++)
+//	    {
+//		s  << "\t" << l_int.at(i);
+//	    }
+        if ( ( int ) vecTfidf.size() != 0 )
+        {
+// 		char* charTfidf = new char[30];
+// 		char* charTf = new char[30];
+// 		char* charIdf = new char[30];
+            int intTfidf = round ( vecTfidf.at ( l_pos ) * 10000000 );
+            int intTf = round ( vecTf.at ( l_pos ) * 10000000 );
+            int intIdf = round ( vecIdf.at ( l_pos ) * 10000000 );
+            float floatTfidf = intTfidf / 10000000.0;
+            float floatTf = intTf / 10000000.0;
+            float floatIdf = intIdf / 10000000.0;
+            vector <float> l_scores ( 3, 0.0 );
+            l_scores.at ( 0 ) = floatTfidf;
+            l_scores.at ( 1 ) = floatTf;
+            l_scores.at ( 2 ) = floatIdf;
+            string l_infos = s.str();
+            pair <string, vector<float> > l_infos_pair ( l_infos, l_scores );
+            m_vec_infos_pairs.push_back ( l_infos_pair );
+// 		l_infos
+// 		sprintf(charTfidf, "%.10f", floatTfidf );
+// 		sprintf(charTf, "%.10f", floatTf );
+// 		sprintf(charIdf, "%.10f", floatIdf );
+
+// 		s  << "\t" << charTfidf << "\t" << charTf << "\t" << charIdf;
+        }
+        s.str ( "" );
+// 	    s  << endl;
+    }
+    s.str ( "" );
+    vector <float> l_scores ( 3, -1.0 );
+    pair <string, vector<float> > l_infos_pair ( "RIEN", l_scores );
+    m_vec_infos_pairs.push_back ( l_infos_pair );
+    if ( ( int ) m_vec_infos_pairs.size() == 0 )
+    {
+        cerr << "ERROR tfidf::printDatasSorted : m_vec_infos_pairs size is null" << endl;
+        exit ( 1 );
+    }
+// 	cerr << "tri de "<< (int)m_vec_infos_pairs.size() <<endl;
+    std::sort ( m_vec_infos_pairs.begin(), m_vec_infos_pairs.end(), mySortingFunction4 );
+    s << "Position\tIds\thash\tmot\tTF.IDF\tTF\tIDF" << endl;
+    for ( int l_pos = 0; l_pos < ( int ) m_vec_infos_pairs.size() && l_pos < nbest; l_pos++ )
+    {
+        if ( m_vec_infos_pairs.at ( l_pos ).first.compare ( "RIEN" ) )
+        {
+            s << l_pos << "\t" << m_vec_infos_pairs.at ( l_pos ).first << "\t" << m_vec_infos_pairs.at ( l_pos ).second.at ( 0 ) << "\t" << m_vec_infos_pairs.at ( l_pos ).second.at ( 1 ) << "\t" << m_vec_infos_pairs.at ( l_pos ).second.at ( 2 ) << endl ;
+        }
+    }
+    return s.str();
+}
+
+
 
 
 void tfidf::compileData()
 {
     for ( int i = 0; i < ( int ) m_testerCount.size(); i++ )
     {
+// 	cerr << m_testerCount.at ( i ).second.at ( 0 ) <<"|";
+// 	cerr << m_ngramCount.at ( m_testerNgramInfos.at ( i ).second) <<endl;
         float calc_tf = 1.0 * m_testerCount.at ( i ).second.at ( 0 ) / m_ngramCount.at ( m_testerNgramInfos.at ( i ).second );
         vecTf.push_back ( calc_tf );
         int presDoc = 0;
-        vector <int> infos = m_testerCount.at ( i ).second;
+        vector <unsigned long> infos = m_testerCount.at ( i ).second;
         for ( int j = 0; j < ( int ) infos.size(); j++ )
         {
             if ( infos.at ( j ) != 0 )
@@ -468,6 +700,17 @@ vector< string > tfidf::getContent ( int n )
     {
         vector<string> l_vecString = stringToVector ( m_vec_infos_pairs.at ( i ).first, "\t" );
         to_return.push_back ( l_vecString.at ( ( int ) l_vecString.size() - 1 ) );
+    }
+    return to_return;
+}
+
+vector< size_t > tfidf::getContentIds ( int n )
+{
+    vector<size_t> to_return;
+    for ( int i = 0; i < n && i < ( int ) m_vec_infos_pairs.size(); i++ )
+    {
+        vector<string> l_vecString = stringToVector ( m_vec_infos_pairs.at ( i ).first, "\t" );
+        to_return.push_back (hashValueBoost( l_vecString.at ( ( int ) l_vecString.size() - 1 ) ));
     }
     return to_return;
 }

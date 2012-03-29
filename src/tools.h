@@ -1,7 +1,7 @@
 #ifndef __TERCPPTOOLS_H__
 #define __TERCPPTOOLS_H__
 
-
+#include <omp.h>
 #include <vector>
 #include <iostream>
 #include <stdio.h>
@@ -17,6 +17,7 @@
 #include <boost/iostreams/device/file_descriptor.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/device/file.hpp> 
+#include <map>
 
 using namespace std;
 
@@ -29,8 +30,13 @@ namespace Tools
     typedef vector<string> vecString;
     typedef vector<string> alignmentElement;
     typedef vector<alignmentElement> WERalignment;
-
-
+    typedef pair <long, long> pair_countPerDoc;
+//     typedef multimap < pair <long, long> > vecULong;
+//     typedef multimap< pair < long, int > > map_countPerDoc;
+//     typedef pair<size_t, multimap< pair < long, int > > > pair_hashInfo;
+//     typedef multimap< pair<size_t, pair<size_t, multimap< pair < unsigned long, int > > > > > map_hashIndex;
+    
+    
 struct param
 {
     bool debugMode;
@@ -81,5 +87,7 @@ struct param
     size_t hashValueBoost(string s);
 //     ifstream openCompressedFile(ifstream file);
     bool write_gzip(stringstream data, string fileName);
+//     multimap< pair < size_t, pair<size_t, multimap< pair < unsigned long, int > > > > > index(vector<string> s);
+//     multimap< pair < size_t, pair<size_t, multimap< pair < unsigned long, int > > > > > index(vector<vecString> vs);
 }
 #endif

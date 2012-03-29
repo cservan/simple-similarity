@@ -17,7 +17,7 @@ include_directories(BEFORE ${CMAKE_SOURCE_DIR}/src)
 #   main.tfidf.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/tfidf.cpp 
 #)
 SET(similarity_SRCS
-   main.similarity.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/similarity.cpp ${CMAKE_SOURCE_DIR}/src/tfidf.cpp 
+   main.similarity.cpp ${CMAKE_SOURCE_DIR}/src/tools.cpp ${CMAKE_SOURCE_DIR}/src/similarity.cpp ${CMAKE_SOURCE_DIR}/src/myIndex.cpp ${CMAKE_SOURCE_DIR}/src/tfidf.cpp 
 )
 
 #SET(similarityBySentence_SRCS
@@ -45,14 +45,14 @@ SET(similarity_SRCS
 #add_executable(tfidf.0.1 ${tfidf_SRCS})
 #target_link_libraries(tfidf.0.1  boost_regex boost_system boost_filesystem)
 
-add_executable(similarity.0.4 ${similarity_SRCS})
+add_executable(similarity.0.5 ${similarity_SRCS})
 #add_executable(similarityBySentence.0.1 ${similarityBySentence_SRCS})
 #add_executable(filterPhraseTable.0.1 ${filterPhraseTable_SRCS})
 #add_executable(addTranslations.0.1 ${addTranslations_SRCS})
 #add_executable(extractTranslations.0.1 ${extractTranslations_SRCS})
 #add_executable(extractTranslationsFromAlignments.0.1 ${extractTranslationsFromAlignments_SRCS})
 #target_link_libraries(similarityBySentence.0.1  boost_regex boost_system boost_filesystem boost_iostreams)
-target_link_libraries(similarity.0.4  boost_regex boost_system boost_filesystem boost_iostreams)
+target_link_libraries(similarity.0.5  boost_regex boost_system boost_filesystem boost_iostreams gomp boost_thread)
 #target_link_libraries(addTranslations.0.1  boost_regex boost_system boost_filesystem boost_iostreams)
 #target_link_libraries(filterPhraseTable.0.1 boost_regex boost_system boost_filesystem boost_iostreams)
 #target_link_libraries(extractTranslations.0.1  boost_regex boost_system boost_filesystem boost_iostreams)
@@ -61,6 +61,6 @@ target_link_libraries(similarity.0.4  boost_regex boost_system boost_filesystem 
 # target_link_libraries(extractAndDetectOOV  boost_regex)
 
 # install(TARGETS extractAndDetectOOV detectWords.0.5 filteringOutputs extractDictionnary DESTINATION bin)
-install(TARGETS similarity.0.4 DESTINATION bin)
+install(TARGETS similarity.0.5 DESTINATION bin)
 
 

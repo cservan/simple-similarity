@@ -12,7 +12,7 @@
 #include <sstream>
 #include <fstream>
 #include <locale>
-
+#include "myIndex.h"
 
 using namespace std;
 using namespace Tools;
@@ -23,9 +23,9 @@ using namespace Tools;
             vector<size_t> m_tester;
             vector< pair <size_t,string> > m_testerContent;
             vector< pair <size_t,int> > m_testerNgramInfos;
-            vector< pair <size_t,vector <int> > > m_testerCount;
+            vector< pair <size_t,vector <unsigned long> > > m_testerCount;
 	    vector<int> m_ngramCount;
-	    int m_documentSize;
+	    unsigned long m_documentSize;
 	    vector<float> vecTf;
 	    vector<float> vecIdf;
 	    vector<float> vecTfidf;
@@ -41,10 +41,13 @@ using namespace Tools;
 	    void sortHash();
 	    void addDatas(vector<string> s, int ngramSize);
 	    void addDatas(string inputs, vector<string> data, int ngramSize);
+	    void addDatas(myIndex & query, myIndex & l_index, int ngramSize, unsigned long docNbr);
 	    void addDatas(vector<string> s);
 	    string printDatas();
 	    string printDatasSorted();
+	    string printDatasSorted(int nbest);
 	    vector<string> getContent(int n);
+	    vector<size_t> getContentIds(int n);
 	    void compileData();
 	    void compileData(vector<string> vs);
 	    float getScore(string s) ;
