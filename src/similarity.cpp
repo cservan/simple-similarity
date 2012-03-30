@@ -729,10 +729,15 @@ void similarity::evaluate(int & l_vsInc)
 		else
 		{
 // 		    cerr << l_result << "|"<< l_countContent<<"|"<<l_countDoc<<"|"<< ((float)l_countContent/(float)l_countDoc) << "|";
-		    if (l_countDoc > l_countContent)
+		    cerr << l_sumSquare <<"|"<< m_sumSquareContent << endl;
+		    if (l_sumSquare > m_sumSquareContent)
 		    {
-			l_result=l_result*((float)l_countContent/(float)l_countDoc);
+			l_result=l_result*((float)m_sumSquareContent/(float)l_sumSquare);
 		    }
+// 		    if (l_countDoc > l_countContent)
+// 		    {
+// 			l_result=l_result*((float)l_countContent/(float)l_countDoc);
+// 		    }
 		}
 	    }
 	    m_similarityResult.at(l_vsInc)=(l_result*100.0);
