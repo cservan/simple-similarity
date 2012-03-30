@@ -819,7 +819,10 @@ void similarity::calculateSimilarity(myIndex& data_index, string s, int ngramSiz
 	    }
 	}
 // 	m_threads.join_all();
-    sortResults(nbest);
+    if (!m_noSort)
+    {
+      sortResults(nbest);
+    }
 
 }
 
