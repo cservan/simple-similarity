@@ -785,6 +785,9 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
 
         }
         vector <string> l_indexVec=stringToVector(stringContent," ");
+	vector <string> l_testVec;
+	vector <size_t> l_testVecIds;
+// 	vector <size_t> l_indexVecIds(l_indexVec.size());
 //     to_keep.clear();
 
         for ( int l_pos = 0; l_pos + l_p.ngramSize <= ( int ) l_indexVec.size(); l_pos++ )
@@ -792,6 +795,9 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
             string l_ngram_test = vectorToString ( subVector ( l_indexVec, l_pos, l_pos + l_p.ngramSize ), " " );
 // 	    myIndex l_myIndex(l_ngram_test, i);
             l_myIndexQuery.addIndex(l_ngram_test, 0,true,true);
+	    l_testVec.push_back(l_ngram_test);
+	    l_testVecIds.push_back(hashValueBoost(l_ngram_test));
+	    
 // 	    size_t l_ngramHash = hashValueBoost ( l_ngram_test );
         }
 	
@@ -851,6 +857,11 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
                 l_similarity.addTfIdfData(l_tfidf.getContent(l_p.nbestReturned));
 		l_similarity.addTfIdfDataIds(l_tfidf.getContentIds(l_p.nbestReturned));
             }
+            if (!l_p.TfIdfCalculation)
+	    {
+                l_similarity.addTfIdfData(l_testVec);
+		l_similarity.addTfIdfDataIds(l_testVecIds);
+	    }
             l_similarity.calculateSimilarity(l_myIndex, stringContent,l_p.ngramSize, l_p.nbestSimReturned);
 
             output << l_similarity.printResults(l_p.nbestSimReturned);
