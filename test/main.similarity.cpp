@@ -40,6 +40,7 @@ struct parametres
     bool TfIdfCalculation;
     bool SimilarityCalulation;
     bool SbyS;
+    bool noSort;
 //     bool outputAlignments;
 //     string sourceFile;     // path to the resources
 //     string targetFile;     // path to the configuration files
@@ -66,7 +67,7 @@ string afficher_hypothesis ( vector<vecString> hyp_full, int pos );
 void usage()
 {
 // 	cerr<<"tercpp [-N] [-s] [-P] -r ref -h hyp [-a alter_ref] [-b beam_width] [-S trans_span_prefix] [-o out_format -n out_pefix] [-d max_shift_distance] [-M match_cost] [-D delete_cost] [-B substitute_cost] [-I insert_cost] [-T shift_cost]"<<endl;
-    cerr << "Usage : " << endl << "\tsimilarity --in inputFileName --data directoryDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly]:\nor \n \tsimilarity --SbyS --in inputFileName --data fileDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--nbestTfIdf nbestSize] [--nbestSimilarity nbestSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly]:\n\n\t\t --debugMode \t\t\t: print debug messages \n\t\t --SbyS \t\t\t: considers each sentence as document in the inputFile and in the Data. \n\t\t --TfIdfOnly|SimilarityOnly \t: calculate only TF.IDF OR calculate only the similarity and take the input as full request\n\t\t --POS nom,adv,adj,... \t\t: if you want to filer the TF.IDF calculation and the similarity calculation by some POS. WARNING: do not use it if documents do not contain any POS!\n\t\t [--lengthRatio]\t\t\t: considers the numbers of words in the cosine calculation.\n\t\t  --help \t\t\t: print this help message.\n" << endl;
+    cerr << "Usage : " << endl << "\tsimilarity --in inputFileName --data directoryDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly]:\nor \n \tsimilarity --SbyS --in inputFileName --data fileDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--nbestTfIdf nbestSize] [--nbestSimilarity nbestSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly] [--noSort] :\n\n\t\t --debugMode \t\t\t: print debug messages \n\t\t --SbyS \t\t\t: considers each sentence as document in the inputFile and in the Data. \n\t\t --TfIdfOnly|SimilarityOnly \t: calculate only TF.IDF OR calculate only the similarity and take the input as full request\n\t\t --POS nom,adv,adj,... \t\t: if you want to filer the TF.IDF calculation and the similarity calculation by some POS. WARNING: do not use it if documents do not contain any POS!\n\t\t [--lengthRatio]\t\t\t: considers the numbers of words in the cosine calculation.\n\t\t  --help \t\t\t: print this help message.\n" << endl;
     exit ( 0 );
 // 	System.exit(1);
 
@@ -79,12 +80,13 @@ void readCommandLineArguments ( unsigned int argc, char *argv[] , parametres & p
     p.TfIdfCalculation = true;
     p.SimilarityCalulation = true;
     p.lengthRatio = false;
+    p.noSort = false;
     p.outputFileName = "";
     p.directoryDataName = "";
     p.inputFileName="";
     p.ngramSize=1;
-    p.nbestReturned=10000;
-    p.nbestSimReturned=10000;
+    p.nbestReturned=50000;
+    p.nbestSimReturned=50000;
 //     p.nbestmodFile = "";
 //     p.nbestunmodFile="";
 //     p.listeFile="";
@@ -169,6 +171,10 @@ void readCommandLineArguments ( unsigned int argc, char *argv[] , parametres & p
         else if ( s.find ( "--debugMode" ) == 0 )
         {
             p.debugMode = true;
+        }
+        else if ( s.find ( "--noSort" ) == 0 )
+        {
+            p.noSort = true;
         }
         else if ( s.find ( "--TfIdfOnly" ) == 0 )
         {
@@ -369,6 +375,7 @@ bool fileByFile_similarity_calculation(parametres l_p )
         }
     }
     l_similarity.setLengthRatio(l_p.lengthRatio);
+    l_similarity.setSortOptions(l_p.noSort);
 
 //     list_directory(l_p.directoryDataName);
 //     return 0;
@@ -380,6 +387,8 @@ bool fileByFile_similarity_calculation(parametres l_p )
 //     copy(fileNames.begin(),fileNames.end(),ostream_iterator<string>(cerr,"|\n"));cerr<<endl;
 
     l_similarity.addDocNames(fileNames);
+    l_similarity.setSortOptions(l_p.noSort);
+
 //     boost::regex regEx ( "[\\.\\,\\;\\:\\/\\!\?\\(\\)\\[\\]\"\'\\+\\=\\*]+" );
     boost::regex regEx ( "[\\.\\,\\;\\:\\/\\!\?\\(\\)\\[\\]\"\'\\+\\=\\*\\<\\>\\_\\$\\^\\-]+" );
     for (int i=0; i<(int)fileNames.size(); i++)

@@ -658,7 +658,10 @@ void similarity::calculateSimilarity(myIndex & data_index, string s, int ngramSi
 	    }
 	}
 // 	m_threads.join_all();
-    sortResults();
+    if (!m_noSort)
+    {
+	sortResults();
+    }
 }
 
 void similarity::evaluate(int & l_vsInc)
@@ -818,4 +821,10 @@ void similarity::calculateSimilarity(myIndex& data_index, string s, int ngramSiz
 void similarity::addTfIdfDataIds(vector< size_t > vs)
 {
     m_similarityContentIds=vs;
+}
+
+
+void similarity::setSortOptions(bool b)
+{
+    m_noSort = b;
 }

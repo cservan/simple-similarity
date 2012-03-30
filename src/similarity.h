@@ -32,7 +32,7 @@ using namespace Tools;
 	    myIndex * m_data_index;
 	    float m_sumSquareContent;
 	    vector <unsigned long> m_contentSimVector;
-	    
+	    bool m_noSort;
 
         public:
 	    void addTfIdfData(vector<string> vs);
@@ -51,6 +51,7 @@ using namespace Tools;
 	    void evaluate(myIndex& data_index, int l_vsInc, std::vector< unsigned long > l_contentSimVector, float l_sumSquareContent);
 	    void evaluate(int & l_vsInc);
 	    string toString();
+	    void setSortOptions(bool b);
     };
 
 
