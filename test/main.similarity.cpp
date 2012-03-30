@@ -810,7 +810,7 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
         }
         else
         {
-            cerr << "DO the TF.IDF calculation"<<endl;
+//             cerr << "DO the TF.IDF calculation"<<endl;
 //             l_tfidf.addDatas(l_myIndexQuery, l_myIndex,l_p.ngramSize, );
 
 	    l_tfidf.addDatas(l_myIndexQuery,l_myIndex,l_p.ngramSize,(int)docNames.size()+1);
@@ -851,7 +851,7 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
                 l_similarity.addTfIdfData(l_tfidf.getContent(l_p.nbestReturned));
 		l_similarity.addTfIdfDataIds(l_tfidf.getContentIds(l_p.nbestReturned));
             }
-            l_similarity.calculateSimilarity(l_myIndex, stringContent,l_p.ngramSize);
+            l_similarity.calculateSimilarity(l_myIndex, stringContent,l_p.ngramSize, l_p.nbestSimReturned);
 
             output << l_similarity.printResults(l_p.nbestSimReturned);
             output << "========== END OF SIMILARITY SCORES ==========" <<endl;
