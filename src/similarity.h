@@ -33,6 +33,7 @@ using namespace Tools;
 	    float m_sumSquareContent;
 	    vector <unsigned long> m_contentSimVector;
 	    bool m_noSort;
+	    bool m_shortOutputs;
 
         public:
 	    void addTfIdfData(vector<string> vs);
@@ -47,6 +48,8 @@ using namespace Tools;
 	    void sortResults(int indiceMax);
 	    string printResults();
 	    string printResults(int nbest);
+	    string printShortResults(int nbest);
+	    string printShortResults();
 	    void setLengthRatio(bool b);
 	    void evaluate(myIndex& data_index, int l_vsInc, std::vector< unsigned long > l_contentSimVector, float l_sumSquareContent);
 	    void evaluate(int & l_vsInc);

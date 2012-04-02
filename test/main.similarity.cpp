@@ -54,6 +54,7 @@ struct parametres
     int nbestReturned;
     int nbestSimReturned;
     bool lengthRatio;
+    bool printFullResults;
 //     string unmodFile;
 //     string nbestmodFile;
 //     string nbestunmodFile;
@@ -67,7 +68,7 @@ string afficher_hypothesis ( vector<vecString> hyp_full, int pos );
 void usage()
 {
 // 	cerr<<"tercpp [-N] [-s] [-P] -r ref -h hyp [-a alter_ref] [-b beam_width] [-S trans_span_prefix] [-o out_format -n out_pefix] [-d max_shift_distance] [-M match_cost] [-D delete_cost] [-B substitute_cost] [-I insert_cost] [-T shift_cost]"<<endl;
-    cerr << "Usage : " << endl << "\tsimilarity --in inputFileName --data directoryDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly]:\nor \n \tsimilarity --SbyS --in inputFileName --data fileDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--nbestTfIdf nbestSize] [--nbestSimilarity nbestSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly] [--noSort] :\n\n\t\t --debugMode \t\t\t: print debug messages \n\t\t --SbyS \t\t\t: considers each sentence as document in the inputFile and in the Data. \n\t\t --TfIdfOnly|SimilarityOnly \t: calculate only TF.IDF OR calculate only the similarity and take the input as full request\n\t\t --POS nom,adv,adj,... \t\t: if you want to filer the TF.IDF calculation and the similarity calculation by some POS. WARNING: do not use it if documents do not contain any POS!\n\t\t [--lengthRatio]\t\t\t: considers the numbers of words in the cosine calculation.\n\t\t  --help \t\t\t: print this help message.\n" << endl;
+    cerr << "Usage : " << endl << "\tsimilarity --in inputFileName --data directoryDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly]:\nor \n \tsimilarity --SbyS --in inputFileName --data fileDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--nbestTfIdf nbestSize] [--nbestSimilarity nbestSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly] [--noSort] [--printFullResults] :\n\n\t\t --debugMode \t\t\t: print debug messages \n\t\t --SbyS \t\t\t: considers each sentence as document in the inputFile and in the Data. \n\t\t --TfIdfOnly|SimilarityOnly \t: calculate only TF.IDF OR calculate only the similarity and take the input as full request\n\t\t --POS nom,adv,adj,... \t\t: if you want to filer the TF.IDF calculation and the similarity calculation by some POS. WARNING: do not use it if documents do not contain any POS!\n\t\t [--lengthRatio]\t\t\t: considers the numbers of words in the cosine calculation.\n\t\t  --help \t\t\t: print this help message.\n" << endl;
     exit ( 0 );
 // 	System.exit(1);
 
@@ -85,6 +86,7 @@ void readCommandLineArguments ( unsigned int argc, char *argv[] , parametres & p
     p.directoryDataName = "";
     p.inputFileName="";
     p.ngramSize=1;
+    p.printFullResults = false;
     p.nbestReturned=50000;
     p.nbestSimReturned=50000;
 //     p.nbestmodFile = "";
@@ -171,6 +173,10 @@ void readCommandLineArguments ( unsigned int argc, char *argv[] , parametres & p
         else if ( s.find ( "--debugMode" ) == 0 )
         {
             p.debugMode = true;
+        }
+        else if ( s.find ( "--printFullResults" ) == 0 )
+        {
+            p.printFullResults = true;
         }
         else if ( s.find ( "--noSort" ) == 0 )
         {
@@ -591,8 +597,14 @@ cerr << "Taille : "<<l_myIndexQuery.getMyIndexMapInfo().size() << endl;
 //         }
         cerr << "Fin d'ajour des données"<<endl;
         l_similarity.calculateSimilarity(l_myIndex, stringContent,l_p.ngramSize);
-
-        output << l_similarity.printResults(l_p.nbestSimReturned);
+	if (l_p.printFullResults)
+	{
+	    output << l_similarity.printResults(l_p.nbestSimReturned);
+	}
+	else
+	{
+	    output << l_similarity.printShortResults(l_p.nbestSimReturned);
+	}
         cerr << "Ok !"<<endl;
     }
     output.close();
@@ -873,7 +885,14 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
 	    }
             l_similarity.calculateSimilarity(l_myIndex, stringContent,l_p.ngramSize, l_p.nbestSimReturned);
 
-            output << l_similarity.printResults(l_p.nbestSimReturned);
+	if (l_p.printFullResults)
+	{
+	    output << l_similarity.printResults(l_p.nbestSimReturned);
+	}
+	else
+	{
+	    output << l_similarity.printShortResults(l_p.nbestSimReturned);
+	}
             output << "========== END OF SIMILARITY SCORES ==========" <<endl;
         }
         output << "========== END OF SCORES ==========" <<endl;

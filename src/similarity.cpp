@@ -569,6 +569,24 @@ string similarity::printResults()
     return s.str();
 }
 
+string similarity::printShortResults()
+{
+    stringstream s;
+    for (int i=0; i< (int)m_similarityResult.size(); i++)
+    {
+// 	for (int j=0; j< (int)m_similarityResult.at(i).size(); j++)
+// 	{
+	if (m_similarityResult.at(i) > 0)
+	{
+	    s << m_docNames.at(i)<< "\t" << m_similarityResult.at(i);
+// 	    copy(m_similarityVector.at(i).begin(), m_similarityVector.at(i).end(), ostream_iterator<int>(s," "));
+	    s <<endl;
+	}
+// 	}
+    }
+    return s.str();
+}
+
 string similarity::printResults(int nbest)
 {
     stringstream s;
@@ -580,6 +598,22 @@ string similarity::printResults(int nbest)
 	{
 	    s << m_docNames.at(i)<< "\t" << m_similarityResult.at(i) << "\t";
 	    copy(m_similarityVector.at(i).begin(), m_similarityVector.at(i).end(), ostream_iterator<int>(s," "));
+	    s <<endl;
+	}
+    }
+    return s.str();
+}
+
+string similarity::printShortResults(int nbest)
+{
+    stringstream s;
+    for (int i=0; i< (int)m_similarityResult.size() && i < nbest; i++)
+    {
+// 	for (int j=0; j< (int)m_similarityResult.at(i).size(); j++)
+// 	{
+	if (m_similarityResult.at(i) > 0)
+	{
+	    s << m_docNames.at(i)<< "\t" << m_similarityResult.at(i);
 	    s <<endl;
 	}
     }
