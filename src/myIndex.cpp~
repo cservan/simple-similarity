@@ -18,6 +18,7 @@ void myIndex::addIndex(string s, long unsigned int docId, bool direct, bool reve
     {
     if (direct)
     {
+	boost::progress_timer t( std::clog );
      
 	  multimap< size_t, multimap< unsigned long, unsigned long >  >:: iterator it = m_mapIndex.find(hashvalue);
 	  if (it==m_mapIndex.end())
@@ -121,35 +122,17 @@ string myIndex::toString()
 	    to_return << "\t\t"<< (*it2).first <<" | "<<(*it2).second<<endl;
 	}	
     }
-	multimap<unsigned long , multimap <size_t , unsigned long  > >:: iterator r_it = m_mapReverseIndex.begin();
-	for (r_it= m_mapReverseIndex.begin();r_it!=m_mapReverseIndex.end(); r_it++)
+    multimap<unsigned long , multimap <size_t , unsigned long  > >:: iterator r_it = m_mapReverseIndex.begin();
+    for (r_it= m_mapReverseIndex.begin();r_it!=m_mapReverseIndex.end(); r_it++)
+    {
+	to_return << "\t"<< (*r_it).first <<endl;
+	multimap <size_t , unsigned long  > & element=(*r_it).second;
+	multimap <size_t , unsigned long  > :: iterator r_it_element;
+	for (r_it_element= element.begin();r_it_element!=element.end(); r_it_element++)
 	{
-	    to_return << "\t"<< (*r_it).first <<endl;
-	    multimap <size_t , unsigned long  > & element=(*r_it).second;
-	    multimap <size_t , unsigned long  > :: iterator r_it_element;
-	    for (r_it_element= element.begin();r_it_element!=element.end(); r_it_element++)
-	    {
-		to_return << "\t\t"<< (*r_it_element).first <<" | "<<(*r_it_element).second<<endl;
-	    }	
-	}
-	if (r_it==m_mapReverseIndex.end())
-	{
-	    multimap <size_t , unsigned long  > element;
-	    element.insert(pair<size_t, unsigned long >(hashvalue,1));
-	    m_mapReverseIndex.insert(pair < unsigned long , multimap <size_t , unsigned long> > (docId,element));
-	}
-	else
-	{
-	    multimap <size_t , unsigned long  > & element=(*r_it).second;
-	    multimap <size_t , unsigned long  > :: iterator r_it_element=element.find(hashvalue);
-	    if (r_it_element==element.end())
-	    {
-		element.insert(pair<size_t, unsigned long >(hashvalue,1));
-	    }
-	    else
-	    {
-		(*r_it_element).second++;
-	    }
-	}    return to_return.str();
+	    to_return << "\t\t"<< (*r_it_element).first <<" | "<<(*r_it_element).second<<endl;
+	}	
+    }
+    return to_return.str();
 }
 

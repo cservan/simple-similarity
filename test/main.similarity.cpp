@@ -385,10 +385,10 @@ bool fileByFile_similarity_calculation(parametres l_p )
 
 //     list_directory(l_p.directoryDataName);
 //     return 0;
+    vector<string> fileNames=list_directory(l_p.directoryDataName);
 
     cerr << "Chargement des docs...";
 //     vector<string> fileNames=stringToVector(l_p.inputFileName, ",");
-    vector<string> fileNames=list_directory(l_p.directoryDataName);
 
 //     copy(fileNames.begin(),fileNames.end(),ostream_iterator<string>(cerr,"|\n"));cerr<<endl;
 
@@ -399,7 +399,8 @@ bool fileByFile_similarity_calculation(parametres l_p )
     boost::regex regEx ( "[\\.\\,\\;\\:\\/\\!\?\\(\\)\\[\\]\"\'\\+\\=\\*\\<\\>\\_\\$\\^\\-]+" );
     for (int i=0; i<(int)fileNames.size(); i++)
     {
-        cerr <<".";
+//         cerr <<".";
+	boost::progress_timer t( std::clog );
         ifstream data ( fileNames.at(i).c_str() );
         if ( !data.is_open() )
         {
@@ -454,6 +455,7 @@ bool fileByFile_similarity_calculation(parametres l_p )
 
         for ( int l_pos = 0; l_pos + l_p.ngramSize <= ( int ) to_keep_content.size(); l_pos++ )
         {
+// 	    boost::progress_timer t2( std::clog );
             string l_ngram_test = vectorToString ( subVector ( to_keep_content, l_pos, l_pos + l_p.ngramSize ), " " );
             l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
         }

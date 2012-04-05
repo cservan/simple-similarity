@@ -138,7 +138,8 @@ void tfidf::addDatas ( vector< string > s, int ngramSize )
     for ( incFile = 0; incFile < m_documentSize; incFile++ )
     {
         cerr << ".";
-        vector<string> sentence = stringToVector ( tokenizePunct ( s.at ( incFile ) ), " " );
+	boost::progress_timer t( std::clog );
+	vector<string> sentence = stringToVector ( tokenizePunct ( s.at ( incFile ) ), " " );
 // 	    cerr << "On traite "<< vectorToString(sentence)<<endl;
 
         for ( int l_ngram = 1; l_ngram <= ngramSize; l_ngram++ )

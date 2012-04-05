@@ -6,6 +6,7 @@
 #include <boost/functional/hash.hpp>
 #include "boost/regex.hpp"
 #include "tools.h"
+#include "boost/progress.hpp"
 // #include "stringHasher.h"
 #include <vector>
 #include <string>
