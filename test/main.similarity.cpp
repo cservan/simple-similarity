@@ -400,11 +400,12 @@ bool fileByFile_similarity_calculation(parametres l_p )
     for (int i=0; i<(int)fileNames.size(); i++)
     {
 //         cerr <<".";
+	cerr << "Chargement de " <<  fileNames.at(i) << "\t";
 	boost::progress_timer t( std::clog );
         ifstream data ( fileNames.at(i).c_str() );
         if ( !data.is_open() )
         {
-            cerr << "ERROR : main : can't open file : " <<  fileNames.at(i)<< endl ;
+            cerr << "ERROR : main : can't open file : " <<  fileNames.at(i) << " "<< endl ;
             exit ( 0 );
         }
         int cpt=0;
