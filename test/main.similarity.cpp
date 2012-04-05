@@ -316,7 +316,7 @@ vector <string> list_directory(string dir)
                 {
                     ++file_count;
 //           std::cout << dir_itr->path().filename() << "\n";
-                    to_return.push_back(full_path.directory_string()+dir_itr->path().filename());
+                    to_return.push_back(full_path.directory_string()+"/"+dir_itr->path().filename());
                 }
                 else
                 {
@@ -340,6 +340,7 @@ vector <string> list_directory(string dir)
     {
 //     std::cout << "\nFound: " << full_path.file_string() << "\n";
     }
+    sort(to_return.begin(),to_return.end());
     return to_return;
 }
 
@@ -354,6 +355,11 @@ string getTime()
     return s.str();
 }
 
+
+void run_thread(myIndex & l_myIndex, string test, int i, parametres l_p)
+{
+	l_myIndex.addIndex(test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
+}
 
 bool fileByFile_similarity_calculation(parametres l_p )
 {
@@ -455,26 +461,36 @@ bool fileByFile_similarity_calculation(parametres l_p )
         stringContent=vectorToString(to_keep_content," ");
 
 
-	int tenPercent=(int)to_keep_content.size()/100;
+	int tenPercent=(int)to_keep_content.size()/10;
+	int onePercent=(int)to_keep_content.size()/100;
 	int fullSize=( int ) to_keep_content.size() - l_p.ngramSize;
 // 	#pragma omp parallel for 
-// 	boost::thread_group m_threads;
+ 	boost::thread_group m_threads;
 // 	m_threads.create_thread(boost::bind(&similarity::evaluate , this, l_vsInc));
+//	#pragma omp parallel for shared (l_myIndex) num_threads(2)
+//	rien
         for ( int l_pos = 0; l_pos <= fullSize; l_pos++ )
         {
-	    if (fullSize>100)
+	    if (fullSize>10)
 	    {
 // 	    boost::progress_timer t2( std::clog );
-		if ( l_pos  % tenPercent  == 0 )
+		if ( l_pos  % onePercent  == 0 )
 		{
 		    cerr << ".";
 // 		    m_threads.join_all();
 		}
+		if ( l_pos  % tenPercent  == 0 )
+                {
+//                    cerr << ".";
+                  m_threads.join_all();
+                }
 	    }
             string l_ngram_test = vectorToString ( subVector ( to_keep_content, l_pos, l_pos + l_p.ngramSize ), " " );
-	    
-            l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
+//		void run_thread(myIndex & l_myIndex, string test, int i, parametres l_p)
+	    m_threads.create_thread(boost::bind(&myIndex::addIndex,l_myIndex,l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation));
+//            l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
         }
+	m_threads.join_all();
 	inputContent.push_back(stringContent);
         data.close();
     }
