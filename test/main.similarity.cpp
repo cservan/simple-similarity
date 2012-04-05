@@ -8,6 +8,8 @@
 #include "boost/filesystem/operations.hpp"
 #include "boost/filesystem/path.hpp"
 #include "boost/progress.hpp"
+#include <boost/bind.hpp>
+#include <boost/thread.hpp>
 
 #include <iostream>
 #include <string>
@@ -453,20 +455,24 @@ bool fileByFile_similarity_calculation(parametres l_p )
         stringContent=vectorToString(to_keep_content," ");
 
 
-	int tenPercent=(int)to_keep_content.size()/10;
+	int tenPercent=(int)to_keep_content.size()/100;
 	int fullSize=( int ) to_keep_content.size() - l_p.ngramSize;
 // 	#pragma omp parallel for 
+// 	boost::thread_group m_threads;
+// 	m_threads.create_thread(boost::bind(&similarity::evaluate , this, l_vsInc));
         for ( int l_pos = 0; l_pos <= fullSize; l_pos++ )
         {
-	    if (fullSize>10)
+	    if (fullSize>100)
 	    {
 // 	    boost::progress_timer t2( std::clog );
 		if ( l_pos  % tenPercent  == 0 )
 		{
 		    cerr << ".";
+// 		    m_threads.join_all();
 		}
 	    }
             string l_ngram_test = vectorToString ( subVector ( to_keep_content, l_pos, l_pos + l_p.ngramSize ), " " );
+	    
             l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
         }
 	inputContent.push_back(stringContent);
@@ -543,7 +549,6 @@ bool fileByFile_similarity_calculation(parametres l_p )
     }
     vector <string> l_indexVec=stringToVector(stringContent," ");
 //     to_keep.clear();
-
     for ( int l_pos = 0; l_pos + l_p.ngramSize <= ( int ) l_indexVec.size(); l_pos++ )
     {
         string l_ngram_test = vectorToString ( subVector ( l_indexVec, l_pos, l_pos + l_p.ngramSize ), " " );

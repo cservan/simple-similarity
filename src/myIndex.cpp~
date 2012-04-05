@@ -41,8 +41,8 @@ void myIndex::addIndex(string s, long unsigned int docId, bool direct, bool reve
 	    }
 	}
     }
-    if (reverse)
-    {
+//     if (reverse)
+//     {
 	multimap<unsigned long , multimap <size_t , unsigned long  > >:: iterator r_it = m_mapReverseIndex.find(docId);
 	if (r_it==m_mapReverseIndex.end())
 	{
@@ -63,7 +63,7 @@ void myIndex::addIndex(string s, long unsigned int docId, bool direct, bool reve
 		(*r_it_element).second++;
 	    }
 	}
-    }
+//     }
     }
 }
 
