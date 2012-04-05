@@ -5,6 +5,7 @@ PROJECT(topicAdaptation)
 #if you don't want the full compiler output, remove the following line
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 #SET( CMAKE_CXX_FLAGS " -Wno-deprecated " CACHE STRING "Flags used by the C++ compiler" FORCE )
+SET (CMAKE_CXX_FLAGS " -fopenmp ")
 #add_definitions(-DCMAKE_INSTALL_PREFIX=/lium/buster1/servan/Programmation/TERCpp)
 add_definitions(-DIBPP_LINUX -DIBPP_GCC -DINSTANTIATE_TEMPLATES )
 include_directories(/Data/Tools/include)

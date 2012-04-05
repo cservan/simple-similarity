@@ -454,8 +454,9 @@ bool fileByFile_similarity_calculation(parametres l_p )
 
 
 	int tenPercent=(int)to_keep_content.size()/10;
-
-        for ( int l_pos = 0; l_pos + l_p.ngramSize <= ( int ) to_keep_content.size(); l_pos++ )
+	int fullSize=( int ) to_keep_content.size() - l_p.ngramSize;
+	#pragma omp parallel for 
+        for ( int l_pos = 0; l_pos <= fullSize; l_pos++ )
         {
 // 	    boost::progress_timer t2( std::clog );
 	    if ( l_pos  % tenPercent  == 0 )
