@@ -457,6 +457,7 @@ bool fileByFile_similarity_calculation(parametres l_p )
         for ( int l_pos = 0; l_pos + l_p.ngramSize <= ( int ) to_keep_content.size(); l_pos++ )
         {
 // 	    boost::progress_timer t2( std::clog );
+	    cerr <<".";
             string l_ngram_test = vectorToString ( subVector ( to_keep_content, l_pos, l_pos + l_p.ngramSize ), " " );
             l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
         }
