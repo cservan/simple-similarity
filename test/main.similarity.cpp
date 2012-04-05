@@ -455,14 +455,17 @@ bool fileByFile_similarity_calculation(parametres l_p )
 
 	int tenPercent=(int)to_keep_content.size()/10;
 	int fullSize=( int ) to_keep_content.size() - l_p.ngramSize;
-	#pragma omp parallel for 
+// 	#pragma omp parallel for 
         for ( int l_pos = 0; l_pos <= fullSize; l_pos++ )
         {
-// 	    boost::progress_timer t2( std::clog );
-	    if ( l_pos  % tenPercent  == 0 )
+	    if (fullSize>10)
 	    {
-		cerr << ".";
-	    }	    
+// 	    boost::progress_timer t2( std::clog );
+		if ( l_pos  % tenPercent  == 0 )
+		{
+		    cerr << ".";
+		}
+	    }
             string l_ngram_test = vectorToString ( subVector ( to_keep_content, l_pos, l_pos + l_p.ngramSize ), " " );
             l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
         }
@@ -551,9 +554,10 @@ bool fileByFile_similarity_calculation(parametres l_p )
 
 //     exit(0);
 //      stringContent+=" ";
-cerr << "Taille : "<<l_myIndexQuery.getMyIndex().size() << endl;
-cerr << "Taille : "<<l_myIndexQuery.getMyIndexMapInfo().size() << endl;
-// cerr << "DATA :" << endl << l_myIndexQuery.toString() <<endl;
+// cerr << "Taille : "<<l_myIndexQuery.getMyIndex().size() << endl;
+// cerr << "Taille : "<<l_myIndexQuery.getMyIndexMapInfo().size() << endl;
+// cerr << "DATA :" << endl << l_myIndexQuery.toString() <<endl<<"======================================"<<endl;
+// cerr << "DATA :" << endl << l_myIndex.toString() <<endl;
     ofstream output((l_p.outputFileName+".out").c_str());
     if (!l_p.TfIdfCalculation)
     {

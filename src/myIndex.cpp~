@@ -18,7 +18,6 @@ void myIndex::addIndex(string s, long unsigned int docId, bool direct, bool reve
     {
     if (direct)
     {
-	boost::progress_timer t( std::clog );
      
 	  multimap< size_t, multimap< unsigned long, unsigned long >  >:: iterator it = m_mapIndex.find(hashvalue);
 	  if (it==m_mapIndex.end())
