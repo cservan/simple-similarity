@@ -616,8 +616,9 @@ string tfidf::printDatasSorted(int nbest)
             m_vec_infos_pairs.push_back ( l_infos_pair );
 	    if (m_debugMode)
 	    {
-		cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl<< l_pos << "\t" << l_infos_pair.first << "\t" <<  l_infos_pair.second.at(0) << " " <<  l_infos_pair.second.at(1)  << " " <<  l_infos_pair.second.at(2) <<endl<<"END_DEBUGMODE"<<endl;
-		
+		cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl;
+		cerr<< l_pos << "\t" ;
+		cerr<< l_infos_pair.first << "\t" <<  l_infos_pair.second.at(0) << " " <<  l_infos_pair.second.at(1)  << " " <<  l_infos_pair.second.at(2) <<endl<<"END_DEBUGMODE"<<endl;
 	    }	    
 // 		l_infos
 // 		sprintf(charTfidf, "%.10f", floatTfidf );
@@ -673,6 +674,15 @@ void tfidf::compileData()
             }
         }
         float calc_idf = log ( 1.0 * m_documentSize / presDoc );
+	if (m_debugMode)
+	{
+	    cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl;
+	    cerr<< i << "\t" ;
+	    cerr<<"calc_tf: "<< calc_tf <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_ngramCount.at ( m_testerNgramInfos.at ( i ).second 
+	    <<endl;
+	    cerr << "calc_idf: " << calc_idf << " = log( " << m_documentSize << " / " << presDoc << endl;
+	    cerr<<"END_DEBUGMODE"<<endl;
+	}	
         vecIdf.push_back ( calc_idf );
         vecTfidf.push_back ( calc_tf*calc_idf );
     }
