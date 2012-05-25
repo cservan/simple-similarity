@@ -35,10 +35,10 @@ void myIndex::addIndex(string s, long unsigned int docId, bool direct, bool reve
 	    {
 		element.insert(pair<unsigned long, unsigned long >(docId,1));
 	    }
-	    else
-	    {
-		(*it_element).second++;
-	    }
+// 	    else
+// 	    {
+// 		(*it_element).second++;
+// 	    }
 	}
     }
 //     if (reverse)
