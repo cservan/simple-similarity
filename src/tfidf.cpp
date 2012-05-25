@@ -572,6 +572,11 @@ string tfidf::printDatasSorted(int nbest)
     for ( int l_pos = 0; l_pos < ( int ) m_tester.size(); l_pos++ )
     {
         s << l_pos << "\t" << m_tester.at ( l_pos ) << "\t" << m_testerContent.at ( l_pos ).second ;
+	if (m_debugMode)
+	{
+	    cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl<< l_pos << "\t" << m_tester.at ( l_pos ) << "\t" << m_testerContent.at ( l_pos ).second <<endl<<"END_DEBUGMODE"<<endl;
+	    
+	}
         vector <unsigned long>l_int = m_testerCount.at ( l_pos ).second;
 //	    for (int i=0; i< (int)l_int.size(); i++)
 //	    {
