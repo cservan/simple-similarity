@@ -464,9 +464,17 @@ bool fileByFile_similarity_calculation(parametres l_p )
 
 	int tenPercent=(int)to_keep_content.size()/10;
 	int onePercent=(int)to_keep_content.size()/100;
+	if (onePercent==0)
+	{
+	    onePercent=1;
+	}
+	if (tenPercent==0)
+	{
+	    tenPercent=1;
+	}
 	int fullSize=( int ) to_keep_content.size() - l_p.ngramSize-1;
  	boost::thread_group m_threads;
-	cerr << "onePercent :" << onePercent << endl;
+// 	cerr << "onePercent :" << onePercent << endl;
 // 	m_threads.create_thread(boost::bind(&similarity::evaluate , this, l_vsInc));
 //	#pragma omp parallel for shared (l_myIndex) num_threads(2)
 //	rien
