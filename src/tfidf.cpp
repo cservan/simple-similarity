@@ -569,6 +569,7 @@ string tfidf::printDatasSorted(int nbest)
       
     }
 // 	vector<pair <string, vector<float> > > vec_infos_pairs;
+    
     for ( int l_pos = 0; l_pos < ( int ) m_tester.size(); l_pos++ )
     {
         s << l_pos << "\t" << m_tester.at ( l_pos ) << "\t" << m_testerContent.at ( l_pos ).second ;
@@ -582,11 +583,24 @@ string tfidf::printDatasSorted(int nbest)
 //	    {
 //		s  << "\t" << l_int.at(i);
 //	    }
-        if ( ( int ) vecTfidf.size() != 0 )
-        {
 // 		char* charTfidf = new char[30];
 // 		char* charTf = new char[30];
 // 		char* charIdf = new char[30];
+	    if ( l_pos >= ( int ) vecTfidf.size() )
+	    {
+		cerr << "ERROR tfidf::printDatasSorted : vecTfidf size "<<  ( int ) vecTfidf.size() << " indice asked: " << l_pos << endl;
+		exit ( 1 );	    
+	    }
+	    if ( l_pos >= ( int ) vecTf.size() )
+	    {
+		cerr << "ERROR tfidf::printDatasSorted : vecTf size "<<  ( int ) vecTf.size() << " indice asked: " << l_pos << endl;
+		exit ( 1 );	    
+	    }
+	    if ( l_pos >= ( int ) vecIdf.size() )
+	    {
+		cerr << "ERROR tfidf::printDatasSorted : vecIdf size "<<  ( int ) vecIdf.size() << " indice asked: " << l_pos << endl;
+		exit ( 1 );	    
+	    }
             int intTfidf = round ( vecTfidf.at ( l_pos ) * 10000000 );
             int intTf = round ( vecTf.at ( l_pos ) * 10000000 );
             int intIdf = round ( vecIdf.at ( l_pos ) * 10000000 );
@@ -606,7 +620,8 @@ string tfidf::printDatasSorted(int nbest)
 // 		sprintf(charIdf, "%.10f", floatIdf );
 
 // 		s  << "\t" << charTfidf << "\t" << charTf << "\t" << charIdf;
-        }
+//         }
+        cerr << "WARNING tfidf::printDatasSorted : vecTfidf size is null" << endl;
         s.str ( "" );
 // 	    s  << endl;
     }
