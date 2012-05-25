@@ -686,6 +686,10 @@ void similarity::calculateSimilarity(myIndex & data_index, string s, int ngramSi
 // 	cerr << "l_sumSquareContent "<< l_sumSquareContent << endl;
 // 	cerr << "on fait des trucs " << (int)data_index.getMyReverseIndex().size()<< " de fois"<<endl;
 	int tenPercent=(int)data_index.getMyReverseIndex().size()/10;
+	if (tenPercent==0)
+	{
+	    tenPercent=1;
+	}
 	for (l_vsInc=0; l_vsInc< (int)data_index.getMyReverseIndex().size(); l_vsInc++)
 	{
 // 	    m_threads.create_thread(boost::bind(&similarity::evaluate , this, l_vsInc));

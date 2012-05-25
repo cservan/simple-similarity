@@ -379,6 +379,11 @@ bool fileByFile_similarity_calculation(parametres l_p )
     vector<string> stopWords;
     myIndex l_myIndex;
     myIndex l_myIndexQuery;
+    if (l_p.debugMode)
+    {
+	cerr << "WARNING: DEBUGMODE ON, it could be very verbose !!! "<< endl;
+    }
+    l_tfidf.setDebugMode(l_p.debugMode);
     if ((int)l_p.stopWordsList.length()>0)
     {
         ifstream stopWordsFile(l_p.stopWordsList.c_str());
@@ -408,7 +413,7 @@ bool fileByFile_similarity_calculation(parametres l_p )
     l_similarity.setSortOptions(l_p.noSort);
 
 //     boost::regex regEx ( "[\\.\\,\\;\\:\\/\\!\?\\(\\)\\[\\]\"\'\\+\\=\\*]+" );
-    boost::regex regEx ( "[\\.\\,\\;\\:\\/\\!\?\\(\\)\\[\\]\"\'\\+\\=\\*\\<\\>\\_\\$\\^\\-]+" );
+    boost::regex regEx ( "[\\.\\,\\;\\:\\/\\!\?\\(\\)\\[\\]\"\'\\+\\=\\*\\<\\>\\_\\$\\^\\-’»«]+" );
     for (int i=0; i<(int)fileNames.size(); i++)
     {
 //         cerr <<".";
@@ -457,7 +462,7 @@ bool fileByFile_similarity_calculation(parametres l_p )
         for (int i =0; i< (int) analyse_content.size(); i++)
         {
             boost::match_results<string::const_iterator> vectorFilter;
-            if (!boost::regex_match ( analyse_content.at(i), vectorFilter, regEx, boost::match_default))
+            if (!boost::regex_match ( analyse_content.at(i), vectorFilter, regEx, boost::match_default) && analyse_content.at(i).size()>1)
             {
                 to_keep_content.push_back(analyse_content.at(i));
             }
@@ -500,9 +505,9 @@ bool fileByFile_similarity_calculation(parametres l_p )
             string l_ngram_test = vectorToString ( subVector ( to_keep_content, l_pos, l_pos + l_p.ngramSize ), " " );
 // 	    string l_ngram_test2 = vectorToString ( subVector ( to_keep_content, l_pos+1, l_pos+1 + l_p.ngramSize ), " " );
 //		void run_thread(myIndex & l_myIndex, string test, int i, parametres l_p)
-	    m_threads.create_thread(boost::bind(&myIndex::addIndex,l_myIndex,l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation));
+// 	    m_threads.create_thread(boost::bind(&myIndex:F:addIndex,l_myIndex,l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation));
 // 	    m_threads.create_thread(boost::bind(&myIndex::addIndex,l_myIndex,l_ngram_test2, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation));
-//            l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
+           l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
         }
 	m_threads.join_all();
 	inputContent.push_back(stringContent);
@@ -529,7 +534,7 @@ bool fileByFile_similarity_calculation(parametres l_p )
     for (int i =0; i< (int) analyse.size(); i++)
     {
         boost::match_results<string::const_iterator> vectorFilter;
-        if (!boost::regex_match ( analyse.at(i), vectorFilter, regEx, boost::match_default))
+        if (!boost::regex_match ( analyse.at(i), vectorFilter, regEx, boost::match_default) && analyse.at(i).size()>1 )
         {
             to_keep.push_back(analyse.at(i));
         }
@@ -604,7 +609,8 @@ bool fileByFile_similarity_calculation(parametres l_p )
         cerr << "Add data for TF.IDF calculation"<<endl;
 // 	copy(inputContent.begin(),inputContent.end(),ostream_iterator<string>(cerr,"|\n"));cerr<<endl;
 // 	exit(0);
-        l_tfidf.addDatas(l_myIndexQuery, l_myIndex,l_p.ngramSize, (unsigned long)fileNames.size());
+	
+        l_tfidf.addDatas(l_myIndexQuery, l_myIndex,l_p.ngramSize, (unsigned long)fileNames.size()+1);
         cerr << "Compile data and made the TF.IDF calculation"<<endl;
         l_tfidf.compileData();
         //     cerr << "Affichage : "<< endl << l_tfidf.printDatas();
@@ -643,7 +649,7 @@ bool fileByFile_similarity_calculation(parametres l_p )
 //         {
 //             l_similarity.addTfIdfData(l_tfidf.getContent(l_p.nbestReturned));
 //         }
-        cerr << "Fin d'ajour des données"<<endl;
+        cerr << "Fin d'ajout des données"<<endl;
         l_similarity.calculateSimilarity(l_myIndex, stringContent,l_p.ngramSize);
 	if (l_p.printFullResults)
 	{
