@@ -399,7 +399,7 @@ bool fileByFile_similarity_calculation(parametres l_p )
 //     return 0;
     vector<string> fileNames=list_directory(l_p.directoryDataName);
 
-    cerr << "Chargement des docs...";
+    cerr << "Chargement des docs...\n";
 //     vector<string> fileNames=stringToVector(l_p.inputFileName, ",");
 
 //     copy(fileNames.begin(),fileNames.end(),ostream_iterator<string>(cerr,"|\n"));cerr<<endl;

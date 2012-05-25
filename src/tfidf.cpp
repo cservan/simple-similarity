@@ -563,6 +563,11 @@ string tfidf::printDatasSorted(int nbest)
 {
     stringstream s;
     m_vec_infos_pairs.clear();
+    if (m_debugMode)
+    {
+	cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl<<"m_tester.size() : "<<(int)m_tester.size()<<endl<<"vecTfidf.size() : "<<( int ) vecTfidf.size()<<endl<<"END_DEBUGMODE"<<endl;
+      
+    }
 // 	vector<pair <string, vector<float> > > vec_infos_pairs;
     for ( int l_pos = 0; l_pos < ( int ) m_tester.size(); l_pos++ )
     {
