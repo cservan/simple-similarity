@@ -621,10 +621,10 @@ string tfidf::printDatasSorted(int nbest)
 
 // 		s  << "\t" << charTfidf << "\t" << charTf << "\t" << charIdf;
 //         }
-        cerr << "WARNING tfidf::printDatasSorted : vecTfidf size is null" << endl;
         s.str ( "" );
 // 	    s  << endl;
     }
+    
     s.str ( "" );
     vector <float> l_scores ( 3, -1.0 );
     pair <string, vector<float> > l_infos_pair ( "RIEN", l_scores );
