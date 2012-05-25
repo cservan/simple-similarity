@@ -50,8 +50,8 @@ void myIndex::addIndex(string s, long unsigned int docId, bool direct, bool reve
 		multimap< unsigned long, unsigned long > & element=(*it).second;
 		multimap< unsigned long, unsigned long > :: iterator it_element=element.find(docId);
 		multimap<unsigned long , multimap <size_t , unsigned long  > >:: iterator r_it = m_mapReverseIndex.find(docId);
-		multimap <size_t , unsigned long  > & element=(*r_it).second;
-		multimap <size_t , unsigned long  > :: iterator r_it_element=element.find(hashvalue);
+		multimap <size_t , unsigned long  > & r_element=(*r_it).second;
+		multimap <size_t , unsigned long  > :: iterator r_it_element=r_element.find(hashvalue);
 		if (r_it_element==element.end())
 		{
 		    element.insert(pair<size_t, unsigned long >(hashvalue,1));

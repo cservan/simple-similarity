@@ -294,14 +294,14 @@ vector <string> list_directory(string dir)
 
     if ( !fs::exists( full_path ) )
     {
-        std::cout << "\nNot found: " << full_path.file_string() << std::endl;
+        std::cout << "\nNot found: " << full_path.string() << std::endl;
         return to_return;
     }
 
     if ( fs::is_directory( full_path ) )
     {
         std::cout << "\nIn directory: "
-                  << full_path.directory_string() << "\n\n";
+                  << full_path.string() << "\n\n";
         fs::directory_iterator end_iter;
         for ( fs::directory_iterator dir_itr( full_path );dir_itr != end_iter; ++dir_itr )
         {
@@ -317,7 +317,8 @@ vector <string> list_directory(string dir)
                 {
                     ++file_count;
 //           std::cout << dir_itr->path().filename() << "\n";
-                    to_return.push_back(full_path.directory_string()+"/"+dir_itr->path().filename());
+//                     to_return.push_back(full_path.string()+"/"+dir_itr->path().filename());
+                    to_return.push_back(full_path.string());
                 }
                 else
                 {
