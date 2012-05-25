@@ -70,7 +70,8 @@ string afficher_hypothesis ( vector<vecString> hyp_full, int pos );
 void usage()
 {
 // 	cerr<<"tercpp [-N] [-s] [-P] -r ref -h hyp [-a alter_ref] [-b beam_width] [-S trans_span_prefix] [-o out_format -n out_pefix] [-d max_shift_distance] [-M match_cost] [-D delete_cost] [-B substitute_cost] [-I insert_cost] [-T shift_cost]"<<endl;
-    cerr << "Usage : " << endl << "\tsimilarity --in inputFileName --data directoryDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly]:\nor \n \tsimilarity --SbyS --in inputFileName --data fileDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--nbestTfIdf nbestSize] [--nbestSimilarity nbestSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly] [--noSort] [--printFullResults] :\n\n\t\t --debugMode \t\t\t: print debug messages \n\t\t --SbyS \t\t\t: considers each sentence as document in the inputFile and in the Data. \n\t\t --TfIdfOnly|SimilarityOnly \t: calculate only TF.IDF OR calculate only the similarity and take the input as full request\n\t\t --POS nom,adv,adj,... \t\t: if you want to filer the TF.IDF calculation and the similarity calculation by some POS. WARNING: do not use it if documents do not contain any POS!\n\t\t [--lengthRatio]\t\t\t: considers the numbers of words in the cosine calculation.\n\t\t  --help \t\t\t: print this help message.\n" << endl;
+    cerr << "Usage : " << endl << "\tsimilarity --in inputFileName --data directoryDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly]:\nor \n \tsimilarity --SbyS --in inputFileName --data fileDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--nbestTfIdf nbestSize] [--nbestSimilarity nbestSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly] [--noSort] [--printFullResults] :\n\n\t\t --debugMode \t\t\t: print debug messages \n\t\t --SbyS \t\t\t: considers each sentence as document in the inputFile and in the Data. \n\t\t ";
+    cerr << "--TfIdfOnly|SimilarityOnly \t: calculate only TF.IDF OR calculate only the similarity and take the input as full request\n\t\t --POS nom,adv,adj,... \t\t: if you want to filer the TF.IDF calculation and the similarity calculation by some POS. WARNING: do not use it if documents do not contain any POS!\n\t\t [--lengthRatio]\t\t\t: considers the numbers of words in the cosine calculation.\n\t\t  --help \t\t\t: print this help message.\n" << endl;
     exit ( 0 );
 // 	System.exit(1);
 
@@ -463,15 +464,15 @@ bool fileByFile_similarity_calculation(parametres l_p )
 
 	int tenPercent=(int)to_keep_content.size()/10;
 	int onePercent=(int)to_keep_content.size()/100;
-	int fullSize=( int ) to_keep_content.size() - l_p.ngramSize;
-// 	#pragma omp parallel for 
+	int fullSize=( int ) to_keep_content.size() - l_p.ngramSize-1;
  	boost::thread_group m_threads;
+	cerr << "onePercent :" << onePercent << endl;
 // 	m_threads.create_thread(boost::bind(&similarity::evaluate , this, l_vsInc));
 //	#pragma omp parallel for shared (l_myIndex) num_threads(2)
 //	rien
         for ( int l_pos = 0; l_pos <= fullSize; l_pos++ )
         {
-	    if (fullSize>10)
+	    if (fullSize>100)
 	    {
 // 	    boost::progress_timer t2( std::clog );
 		if ( l_pos  % onePercent  == 0 )
@@ -486,8 +487,10 @@ bool fileByFile_similarity_calculation(parametres l_p )
                 }
 	    }
             string l_ngram_test = vectorToString ( subVector ( to_keep_content, l_pos, l_pos + l_p.ngramSize ), " " );
+	    string l_ngram_test2 = vectorToString ( subVector ( to_keep_content, l_pos+1, l_pos+1 + l_p.ngramSize ), " " );
 //		void run_thread(myIndex & l_myIndex, string test, int i, parametres l_p)
 	    m_threads.create_thread(boost::bind(&myIndex::addIndex,l_myIndex,l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation));
+	    m_threads.create_thread(boost::bind(&myIndex::addIndex,l_myIndex,l_ngram_test2, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation));
 //            l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
         }
 	m_threads.join_all();
