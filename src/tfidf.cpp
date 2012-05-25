@@ -614,6 +614,11 @@ string tfidf::printDatasSorted(int nbest)
             string l_infos = s.str();
             pair <string, vector<float> > l_infos_pair ( l_infos, l_scores );
             m_vec_infos_pairs.push_back ( l_infos_pair );
+	    if (m_debugMode)
+	    {
+		cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl<< l_pos << "\t" << l_infos_pair.first << "\t" <<  l_infos_pair.second.at(0) << " " <<  l_infos_pair.second.at(1)  << " " <<  l_infos_pair.second.at(2) <<endl<<"END_DEBUGMODE"<<endl;
+		
+	    }	    
 // 		l_infos
 // 		sprintf(charTfidf, "%.10f", floatTfidf );
 // 		sprintf(charTf, "%.10f", floatTf );
@@ -634,7 +639,7 @@ string tfidf::printDatasSorted(int nbest)
         cerr << "ERROR tfidf::printDatasSorted : m_vec_infos_pairs size is null" << endl;
         exit ( 1 );
     }
-// 	cerr << "tri de "<< (int)m_vec_infos_pairs.size() <<endl;
+	cerr << "tri de "<< (int)m_vec_infos_pairs.size() <<endl;
     std::sort ( m_vec_infos_pairs.begin(), m_vec_infos_pairs.end(), mySortingFunction4 );
     s << "Position\tIds\thash\tmot\tTF.IDF\tTF\tIDF" << endl;
     for ( int l_pos = 0; l_pos < ( int ) m_vec_infos_pairs.size() && l_pos < nbest; l_pos++ )
