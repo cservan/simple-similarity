@@ -678,8 +678,7 @@ void tfidf::compileData()
 	{
 	    cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl;
 	    cerr<< i << "\t" ;
-	    cerr<<"calc_tf: "<< calc_tf <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_ngramCount.at ( m_testerNgramInfos.at ( i ).second 
-	    <<endl;
+	    cerr<<"calc_tf: "<< calc_tf <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_ngramCount.at ( m_testerNgramInfos.at ( i ).second) <<endl;
 	    cerr << "calc_idf: " << calc_idf << " = log( " << m_documentSize << " / " << presDoc << endl;
 	    cerr<<"END_DEBUGMODE"<<endl;
 	}	
