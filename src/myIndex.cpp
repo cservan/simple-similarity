@@ -27,35 +27,35 @@ void myIndex::addIndex(string s, long unsigned int docId, bool direct, bool reve
 		  m_mapIndex.insert(pair < size_t, multimap< unsigned long, unsigned long >  > (hashvalue,element));
 		  m_mapInfo.insert(pair < size_t, string >(hashvalue,s));
 		  
-		  multimap<unsigned long , multimap <size_t , unsigned long  > >:: iterator r_it = m_mapReverseIndex.find(docId);
-		  if (r_it==m_mapReverseIndex.end())
-		  {
-		      multimap <size_t , unsigned long  > element;
-		      element.insert(pair<size_t, unsigned long >(hashvalue,1));
-		      m_mapReverseIndex.insert(pair < unsigned long , multimap <size_t , unsigned long> > (docId,element));
-		  }
-		  else
-		  {
-		      multimap <size_t , unsigned long  > & element=(*r_it).second;
-		      multimap <size_t , unsigned long  > :: iterator r_it_element=element.find(hashvalue);
-		      if (r_it_element==element.end())
-		      {
-			  element.insert(pair<size_t, unsigned long >(hashvalue,1));
-		      }
-		  }
+// 		  multimap<unsigned long , multimap <size_t , unsigned long  > >:: iterator r_it = m_mapReverseIndex.find(docId);
+// 		  if (r_it==m_mapReverseIndex.end())
+// 		  {
+// 		      multimap <size_t , unsigned long  > element;
+// 		      element.insert(pair<size_t, unsigned long >(hashvalue,1));
+// 		      m_mapReverseIndex.insert(pair < unsigned long , multimap <size_t , unsigned long> > (docId,element));
+// 		  }
+// 		  else
+// 		  {
+// 		      multimap <size_t , unsigned long  > & element=(*r_it).second;
+// 		      multimap <size_t , unsigned long  > :: iterator r_it_element=element.find(hashvalue);
+// 		      if (r_it_element==element.end())
+// 		      {
+// 			  element.insert(pair<size_t, unsigned long >(hashvalue,1));
+// 		      }
+// 		  }
 		
 	      }
 	      else
 	      {
 		multimap< unsigned long, unsigned long > & element=(*it).second;
 		multimap< unsigned long, unsigned long > :: iterator it_element=element.find(docId);
-		multimap<unsigned long , multimap <size_t , unsigned long  > >:: iterator r_it = m_mapReverseIndex.find(docId);
-		multimap <size_t , unsigned long  > & r_element=(*r_it).second;
-		multimap <size_t , unsigned long  > :: iterator r_it_element=r_element.find(hashvalue);
-		if (r_it_element==element.end())
-		{
-		    element.insert(pair<size_t, unsigned long >(hashvalue,1));
-		}
+// 		multimap<unsigned long , multimap <size_t , unsigned long  > >:: iterator r_it = m_mapReverseIndex.find(docId);
+// 		multimap <size_t , unsigned long  > & r_element=(*r_it).second;
+// 		multimap <size_t , unsigned long  > :: iterator r_it_element=r_element.find(hashvalue);
+// 		if (r_it_element==element.end())
+// 		{
+// 		    element.insert(pair<size_t, unsigned long >(hashvalue,1));
+// 		}
 		if (it_element==element.end())
 		{
 		    element.insert(pair<unsigned long, unsigned long >(docId,1));
@@ -66,8 +66,8 @@ void myIndex::addIndex(string s, long unsigned int docId, bool direct, bool reve
 		}
 	    }
 	}
-	else
-	{
+// 	else
+// 	{
 	
     //     if (reverse)
     //     {
@@ -91,7 +91,7 @@ void myIndex::addIndex(string s, long unsigned int docId, bool direct, bool reve
     // 		(*r_it_element).second++;
     // 	    }
 	    }
-	}
+// 	}
     }
 }
 
