@@ -772,7 +772,7 @@ void similarity::evaluate(int & l_vsInc)
 		else
 		{
 // 		    cerr << l_result << "|"<< l_countContent<<"|"<<l_countDoc<<"|"<< ((float)l_countContent/(float)l_countDoc) << "|";
-		    cerr << l_sumSquare <<"|"<< m_sumSquareContent << endl;
+//		    cerr << l_sumSquare <<"|"<< m_sumSquareContent << endl;
 		    if (l_sumSquare > m_sumSquareContent)
 		    {
 			l_result=l_result*((float)m_sumSquareContent/(float)l_sumSquare);

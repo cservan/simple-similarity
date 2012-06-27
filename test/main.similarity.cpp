@@ -319,7 +319,7 @@ vector <string> list_directory(string dir)
 //           std::cout << dir_itr->path().filename() << "\n";
 //                     to_return.push_back(full_path.string()+"/"+dir_itr->path().filename());
 		    string l_full_path=full_path.string();
-		    string l_filename=dir_itr->path().filename().string();
+		    string l_filename=dir_itr->path().filename();
                     to_return.push_back(l_full_path+"/"+l_filename);
                 }
                 else
@@ -693,7 +693,7 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
         }
     }
 
-    cerr << "Chargement des docs...";
+    cerr << "Chargement des docs...\n";
 //     vector<string> fileNames=stringToVector(l_p.inputFileName, ",");
     string fileNames=l_p.directoryDataName;
 //     boost::regex regEx ( "[\\.\\,\\;\\:\\/\\!\?\\(\\)\\[\\]\"\'\\+\\=\\*]+" );
