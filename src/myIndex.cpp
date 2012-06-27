@@ -139,3 +139,20 @@ string myIndex::toString()
     return to_return.str();
 }
 
+void myIndex::compileDataForOkapi()
+{
+    multimap<unsigned long , multimap <size_t , unsigned long  > >:: iterator r_it;
+    for (r_it=m_mapReverseIndex.begin(); r_it!=m_mapReverseIndex.end(); r_it++)
+    {
+        multimap <size_t , unsigned long  > & element=(*r_it).second;
+	multimap <size_t , unsigned long  > :: iterator r_it_element;
+	unsigned long l_docSize=0;
+	for (r_it_element=element.begin(); r_it_element!=element.end(); r_it_element++)
+	{
+	    l_docSize=+(*r_it_element).second;
+	}
+	pair <unsigned long, unsigned long> l_tmp((*r_it).first,l_docSize);
+	m_mapDocSize.insert(l_tmp);
+    }
+}
+

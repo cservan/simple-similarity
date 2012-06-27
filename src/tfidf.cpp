@@ -756,6 +756,39 @@ vector< size_t > tfidf::getContentIds ( int n )
 }
 
 
+
+void tfidf::compileDataOkapibm25()
+{
+    for ( int i = 0; i < ( int ) m_testerCount.size(); i++ )
+    {
+// 	cerr << m_testerCount.at ( i ).second.at ( 0 ) <<"|";
+// 	cerr << m_ngramCount.at ( m_testerNgramInfos.at ( i ).second) <<endl;
+        float calc_tf = 1.0 * m_testerCount.at ( i ).second.at ( 0 ) / m_ngramCount.at ( m_testerNgramInfos.at ( i ).second );
+        vecTf.push_back ( calc_tf );
+        int presDoc = 0;
+        vector <unsigned long> infos = m_testerCount.at ( i ).second;
+        for ( int j = 0; j < ( int ) infos.size(); j++ )
+        {
+            if ( infos.at ( j ) != 0 )
+            {
+                presDoc++;
+            }
+        }
+        float calc_idf = log ( (1.0 * m_documentSize - presDoc + 0.5) / (presDoc + 0.5) );
+	if (m_debugMode)
+	{
+	    cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl;
+	    cerr<< i << "\t" ;
+	    cerr<<"calc_tf: "<< calc_tf <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_ngramCount.at ( m_testerNgramInfos.at ( i ).second) <<endl;
+	    cerr << "calc_idf: " << calc_idf << " = log( " << m_documentSize << " / " << presDoc << endl;
+	    cerr<<"END_DEBUGMODE"<<endl;
+	}	
+        vecIdf.push_back ( calc_idf );
+        vecTfidf.push_back ( calc_tf*calc_idf );
+    }
+
+}
+
 // size_t tfidf::hashValue ( string key )
 // {
 // 

@@ -50,6 +50,7 @@ using namespace Tools;
 	    vector<string> getContent(int n);
 	    vector<size_t> getContentIds(int n);
 	    void compileData();
+	    void compileDataOkapibm25();
 	    void compileData(vector<string> vs);
 	    float getScore(string s) ;
 	    void setDebugMode(bool b);
