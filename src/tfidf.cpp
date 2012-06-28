@@ -669,10 +669,10 @@ void tfidf::addDatas(myIndex & query, myIndex & l_index, int ngramSize, unsigned
 	l_count.at ( 0 ) = 1;
 	multimap< unsigned long, unsigned long > ::iterator l_l_it;
 	multimap< unsigned long, unsigned long > & element=(*l_it).second;
-	multimap< unsigned long, unsigned long > ::iterator it2;
+// 	multimap< unsigned long, unsigned long > ::iterator it2;
 // 	int cpt_tmp=0;
 	l_count.at(0)=(*(element.begin())).second;
-	m_documentQuerySize=m_documentQuerySize+l_count;
+	m_documentQuerySize=m_documentQuerySize+l_count.at(0);
 	pair <size_t, vector<unsigned long> > l_pairCount ( (*l_it).first, l_count );
 	m_tester.push_back ( (*l_it).first );
 	m_testerCount.push_back ( l_pairCount );
