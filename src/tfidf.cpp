@@ -698,7 +698,7 @@ void tfidf::addDatas(myIndex & query, myIndex & l_index, int ngramSize, unsigned
 	    unsigned long value = l_index.getReversInfos(incFile,(*it).first);
 	    int l_pairPos = donnerPos ( (*it).first);
 // 	    m_testerCount.at ( l_pairPos ).second.at ( 0 ) = m_testerCount.at ( l_pairPos ).second.at ( 0 ) + value;
-// 	    m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) = m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) + value;
+	    m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) = m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) + value;
 	}
 	cpt_ngramVec.at ( l_ngram ) = cpt_ngramVec.at ( l_ngram ) + cpt_ngram;
     }    
