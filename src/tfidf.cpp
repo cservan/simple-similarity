@@ -510,6 +510,10 @@ void tfidf::compileData()
                 presDoc++;
             }
         }
+	if (presDoc == 0)
+	{
+	    presDoc=1;
+	}
         float calc_idf = log ( 1.0 * m_documentSize / presDoc );
 	if (m_debugMode)
 	{
@@ -627,7 +631,7 @@ void tfidf::compileDataOkapibm25()
         vecTf.push_back ( calc_tf );
         int presDoc = 0;
         vector <unsigned long> infos = m_testerCount.at ( i ).second;
-        for ( int j = 0; j < ( int ) infos.size(); j++ )
+        for ( int j = 1; j < ( int ) infos.size(); j++ )
         {
             if ( infos.at ( j ) != 0 )
             {
@@ -635,7 +639,7 @@ void tfidf::compileDataOkapibm25()
             }
         }
         float calc_idf_bm25 = log ( (1.0 * m_documentSize - presDoc + 0.5) / (presDoc + 0.5) );
-//	if (m_debugMode)
+	if (m_debugMode)
 	{
 	    cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl;
 	    cerr<< i << "\t" ;
@@ -700,7 +704,7 @@ void tfidf::addDatas(myIndex & query, myIndex & l_index, int ngramSize, unsigned
 	    unsigned long value = l_index.getReversInfos(incFile,(*it).first);
 	    int l_pairPos = donnerPos ( (*it).first);
 // 	    m_testerCount.at ( l_pairPos ).second.at ( 0 ) = m_testerCount.at ( l_pairPos ).second.at ( 0 ) + value;
-//	    m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) = m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) + value;
+	    m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) = m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) + value;
 	}
 	cpt_ngramVec.at ( l_ngram ) = cpt_ngramVec.at ( l_ngram ) + cpt_ngram;
     }    
