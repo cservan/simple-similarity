@@ -160,4 +160,7 @@ std::multimap<unsigned long , unsigned long > myIndex::getMapDocSize()
     return m_mapDocSize;
 }
 
-
+std::multimap< size_t, multimap< unsigned long, unsigned long >  > myIndex::getMapIndex()
+{
+    return m_mapIndex;
+}

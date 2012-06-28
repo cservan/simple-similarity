@@ -41,6 +41,7 @@ using namespace Tools;
 	    void compileComplementDataForOkapi();
 	    string toString();
 	    multimap<unsigned long , unsigned long > getMapDocSize();
+	    multimap< size_t, multimap< unsigned long, unsigned long >  > getMapIndex();
 // 	    size_t getSrcHash();
 // 	    size_t getTgtHash();
 // 	    string getSrcContent();
