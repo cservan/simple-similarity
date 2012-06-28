@@ -595,7 +595,7 @@ vector< size_t > tfidf::getContentIds ( int n )
 void tfidf::compileDataOkapibm25()
 {
   
-    multimap< unsigned long, unsigned long > & element;
+    multimap< unsigned long, unsigned long > :: iterator & element=m_mapDocSize.begin();
     float avgDocSize=0;
     long nbrdoc=0;
     for (element=m_mapDocSize.begin();element!=m_mapDocSize.end(); element++)
