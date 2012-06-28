@@ -195,6 +195,7 @@ void tfidf::addDatas(myIndex & query, myIndex & l_index, int ngramSize, unsigned
     vector<int> cpt_ngramVec ( ngramSize + 1 );
     cerr << "Load Input...";
 //     cerr << "DATA :" << endl << query.toString() <<endl;
+    m_mapDocSize=l_index.getMapDocSize();
     multimap< size_t, multimap< unsigned long, unsigned long >  > & query_map = query.getMyIndex();
     multimap< size_t, multimap< unsigned long, unsigned long >  >::iterator l_it;
 //     cerr << "coucou " << query_map.size()<<endl; 

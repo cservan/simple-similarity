@@ -25,6 +25,7 @@ using namespace Tools;
             vector< pair <size_t,string> > m_testerContent;
             vector< pair <size_t,int> > m_testerNgramInfos;
             vector< pair <size_t,vector <unsigned long> > > m_testerCount;
+	    multimap<unsigned long , unsigned long > m_mapDocSize;
 	    vector<int> m_ngramCount;
 	    unsigned long m_documentSize;
 	    vector<float> vecTf;

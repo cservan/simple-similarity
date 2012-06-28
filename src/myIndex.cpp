@@ -139,7 +139,7 @@ string myIndex::toString()
     return to_return.str();
 }
 
-void myIndex::compileDataForOkapi()
+void myIndex::compileComplementDataForOkapi()
 {
     multimap<unsigned long , multimap <size_t , unsigned long  > >:: iterator r_it;
     for (r_it=m_mapReverseIndex.begin(); r_it!=m_mapReverseIndex.end(); r_it++)
@@ -155,4 +155,9 @@ void myIndex::compileDataForOkapi()
 	m_mapDocSize.insert(l_tmp);
     }
 }
+std::multimap<unsigned long , unsigned long > myIndex::getMapDocSize()
+{
+    return m_mapDocSize;
+}
+
 
