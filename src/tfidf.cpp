@@ -497,7 +497,9 @@ void tfidf::compileData()
     {
 // 	cerr << m_testerCount.at ( i ).second.at ( 0 ) <<"|";
 // 	cerr << m_ngramCount.at ( m_testerNgramInfos.at ( i ).second) <<endl;
-        float calc_tf = 1.0 * m_testerCount.at ( i ).second.at ( 0 ) / m_ngramCount.at ( m_testerNgramInfos.at ( i ).second );
+        float calc_tf = 1.0 * m_testerCount.at ( i ).second.at ( 0 ) / m_documentQuerySize ;
+
+//        float calc_tf = 1.0 * m_testerCount.at ( i ).second.at ( 0 ) / m_ngramCount.at ( m_testerNgramInfos.at ( i ).second );
         vecTf.push_back ( calc_tf );
         int presDoc = 0;
         vector <unsigned long> infos = m_testerCount.at ( i ).second;
@@ -513,7 +515,7 @@ void tfidf::compileData()
 	{
 	    cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl;
 	    cerr<< i << "\t" ;
-	    cerr<<"calc_tf: "<< calc_tf <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_ngramCount.at ( m_testerNgramInfos.at ( i ).second) <<endl;
+	    cerr<<"calc_tf: "<< calc_tf <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_documentQuerySize  <<endl;
 	    cerr << "calc_idf: " << calc_idf << " = log( " << m_documentSize << " / " << presDoc << endl;
 	    cerr<<"END_DEBUGMODE"<<endl;
 	}	
@@ -633,11 +635,11 @@ void tfidf::compileDataOkapibm25()
             }
         }
         float calc_idf_bm25 = log ( (1.0 * m_documentSize - presDoc + 0.5) / (presDoc + 0.5) );
-	if (m_debugMode)
+//	if (m_debugMode)
 	{
 	    cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl;
 	    cerr<< i << "\t" ;
-	    cerr<<"calc_tf: "<< calc_tf <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_ngramCount.at ( m_testerNgramInfos.at ( i ).second) <<endl;
+	    cerr<<"calc_tf: "<< calc_tf <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_documentQuerySize <<endl;
 	    cerr<<"calc_tf_bm25: "<< calc_tf_bm25 <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_ngramCount.at ( m_testerNgramInfos.at ( i ).second) <<endl;
 	    cerr << "calc_idf_bm25: " << calc_idf_bm25 << " = log( " << m_documentSize << " / " << presDoc << endl;
 	    cerr<<"END_DEBUGMODE"<<endl;
@@ -698,7 +700,7 @@ void tfidf::addDatas(myIndex & query, myIndex & l_index, int ngramSize, unsigned
 	    unsigned long value = l_index.getReversInfos(incFile,(*it).first);
 	    int l_pairPos = donnerPos ( (*it).first);
 // 	    m_testerCount.at ( l_pairPos ).second.at ( 0 ) = m_testerCount.at ( l_pairPos ).second.at ( 0 ) + value;
-	    m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) = m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) + value;
+//	    m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) = m_testerCount.at ( l_pairPos ).second.at ( incFile + 1 ) + value;
 	}
 	cpt_ngramVec.at ( l_ngram ) = cpt_ngramVec.at ( l_ngram ) + cpt_ngram;
     }    
