@@ -507,7 +507,8 @@ bool fileByFile_similarity_calculation(parametres l_p )
 //		void run_thread(myIndex & l_myIndex, string test, int i, parametres l_p)
 // 	    m_threads.create_thread(boost::bind(&myIndex:F:addIndex,l_myIndex,l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation));
 // 	    m_threads.create_thread(boost::bind(&myIndex::addIndex,l_myIndex,l_ngram_test2, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation));
-           l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
+//            l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
+           l_myIndex.addIndex(l_ngram_test, i, false, l_p.SimilarityCalulation); //correction made for TF calculation.
         }
 	m_threads.join_all();
 	inputContent.push_back(stringContent);
@@ -777,7 +778,8 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
 
 //     }
 
-            l_myIndex.addIndex(l_ngram_test, cpt, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
+//             l_myIndex.addIndex(l_ngram_test, cpt, l_p.TfIdfCalculation, l_p.SimilarityCalulation); 
+            l_myIndex.addIndex(l_ngram_test, cpt, false, l_p.SimilarityCalulation); // correction made on TF calculation
 // 	    size_t l_ngramHash = hashValueBoost ( l_ngram_test );
         }
 
