@@ -57,6 +57,7 @@ struct parametres
     int nbestSimReturned;
     bool lengthRatio;
     bool printFullResults;
+    bool bm25;
 //     string unmodFile;
 //     string nbestmodFile;
 //     string nbestunmodFile;
@@ -70,8 +71,8 @@ string afficher_hypothesis ( vector<vecString> hyp_full, int pos );
 void usage()
 {
 // 	cerr<<"tercpp [-N] [-s] [-P] -r ref -h hyp [-a alter_ref] [-b beam_width] [-S trans_span_prefix] [-o out_format -n out_pefix] [-d max_shift_distance] [-M match_cost] [-D delete_cost] [-B substitute_cost] [-I insert_cost] [-T shift_cost]"<<endl;
-    cerr << "Usage : " << endl << "\tsimilarity --in inputFileName --data directoryDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly]:\nor \n \tsimilarity --SbyS --in inputFileName --data fileDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--nbestTfIdf nbestSize] [--nbestSimilarity nbestSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly] [--noSort] [--printFullResults] :\n\n\t\t --debugMode \t\t\t: print debug messages \n\t\t --SbyS \t\t\t: considers each sentence as document in the inputFile and in the Data. \n\t\t ";
-    cerr << "--TfIdfOnly|SimilarityOnly \t: calculate only TF.IDF OR calculate only the similarity and take the input as full request\n\t\t --POS nom,adv,adj,... \t\t: if you want to filer the TF.IDF calculation and the similarity calculation by some POS. WARNING: do not use it if documents do not contain any POS!\n\t\t [--lengthRatio]\t\t\t: considers the numbers of words in the cosine calculation.\n\t\t  --help \t\t\t: print this help message.\n" << endl;
+    cerr << "Usage : " << endl << "\tsimilarity --in inputFileName --data directoryDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly]  [--bm25]:\nor \n \tsimilarity --SbyS --in inputFileName --data fileDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--nbestTfIdf nbestSize] [--nbestSimilarity nbestSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly] [--bm25] [--noSort] [--printFullResults] :\n\n\t\t --debugMode \t\t\t: print debug messages \n\t\t --SbyS \t\t\t: considers each sentence as document in the inputFile and in the Data. \n\t\t ";
+    cerr << "--TfIdfOnly|SimilarityOnly \t: calculate only TF.IDF OR calculate only the similarity and take the input as full request\n\t\t --POS nom,adv,adj,... \t\t: if you want to filer the TF.IDF calculation and the similarity calculation by some POS. WARNING: do not use it if documents do not contain any POS!\n\t\t [--lengthRatio]\t\t\t: considers the numbers of words in the cosine calculation.\n\t\t [--bm25]\t\t\t: use the okapi bm25 instead of the classical tf.idf measure.\n\t\t  --help \t\t\t: print this help message.\n" << endl;
     exit ( 0 );
 // 	System.exit(1);
 
@@ -90,6 +91,7 @@ void readCommandLineArguments ( unsigned int argc, char *argv[] , parametres & p
     p.inputFileName="";
     p.ngramSize=1;
     p.printFullResults = false;
+    p.bm25 = false;
     p.nbestReturned=50000;
     p.nbestSimReturned=50000;
 //     p.nbestmodFile = "";
@@ -144,6 +146,10 @@ void readCommandLineArguments ( unsigned int argc, char *argv[] , parametres & p
         else if ( s.find ( "--SbyS" ) == 0 )
         {
             p.SbyS = true;
+        }
+        else if ( s.find ( "--bm25" ) == 0 )
+        {
+            p.bm25 = true;
         }
         else if ( s.find ( "--lengthRatio" ) == 0 )
         {
@@ -607,13 +613,20 @@ bool fileByFile_similarity_calculation(parametres l_p )
     }
     else
     {
-        cerr << "Add data for TF.IDF calculation"<<endl;
+        cerr << "Add data for TF.IDF/Okapi bm25 calculation"<<endl;
 // 	copy(inputContent.begin(),inputContent.end(),ostream_iterator<string>(cerr,"|\n"));cerr<<endl;
 // 	exit(0);
 	
         l_tfidf.addDatas(l_myIndexQuery, l_myIndex,l_p.ngramSize, (unsigned long)fileNames.size()+1);
-        cerr << "Compile data and made the TF.IDF calculation"<<endl;
-        l_tfidf.compileData();
+//         cerr << "Compile data and made the TF.IDF calculation"<<endl;
+	if (l_p.bm25)
+	{
+	    l_tfidf.compileDataOkapibm25();
+	}
+	else
+	{
+	    l_tfidf.compileData();
+	}
         //     cerr << "Affichage : "<< endl << l_tfidf.printDatas();
         //     return 0;
         cerr << "Ok !"<<endl;
@@ -889,7 +902,7 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
         output << "========== BEGIN OF SCORES ==========" <<endl;
         if (!l_p.TfIdfCalculation)
         {
-            cerr << "Pass the TF.IDF calculation"<<endl;
+            cerr << "Pass the TF.IDF/Okapi bm25 calculation"<<endl;
         }
         else
         {
@@ -898,14 +911,21 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
 
 	    l_tfidf.addDatas(l_myIndexQuery,l_myIndex,l_p.ngramSize,(int)docNames.size()+1);
 //             l_tfidf.addDatas(stringContent, inputContent,l_p.ngramSize);
-            l_tfidf.compileData();
+	    if (l_p.bm25)
+	    {
+		l_tfidf.compileDataOkapibm25();
+	    }
+	    else
+	    {
+		l_tfidf.compileData();
+	    }
             //     cerr << "Affichage : "<< endl << l_tfidf.printDatas();
             //     return 0;
             cerr << "Ok !"<<endl;
             cerr << "Ecriture...";
-            output << "========== BEGIN OF TF.IDF SCORES ==========" <<endl;
+            output << "========== BEGIN OF TF.IDF/Okapi bm25 SCORES ==========" <<endl;
             output << l_tfidf.printDatasSorted(l_p.nbestReturned);
-            output << "========== END OF TF.IDF SCORES ==========" <<endl;
+            output << "========== END OF TF.IDF/Okapi bm25 SCORES ==========" <<endl;
             //     for (cpt=0; cpt<(int)outputContent.size(); cpt++)
             //     {
             // 	output << l_tfidf.printDatas();

@@ -612,18 +612,6 @@ void tfidf::compileDataOkapibm25()
     avgDocSize=avgDocSize/(1.0*nbrdoc);
     for ( int i = 0; i < ( int ) m_testerCount.size(); i++ )
     {
-// 	cerr << m_testerCount.at ( i ).second.at ( 0 ) <<"|";
-// 	cerr << m_ngramCount.at ( m_testerNgramInfos.at ( i ).second) <<endl;
-// 	unsigned long tf;
-// 	multimap< size_t, multimap< unsigned long, unsigned long >  >:: iterator it = m_mapIndex.find(m_testerCount.at ( i ).first);
-// 	multimap< unsigned long, unsigned long > & element=(*it).second;
-// 	multimap< unsigned long, unsigned long > ::iterator it2;
-// 	for (it2= element.begin();it2!=element.end(); it2++)
-// 	{
-	    
-// 	    to_return << "\t\t"<< (*it2).first <<" | "<<(*it2).second<<endl;
-// 	}
-// 	(*m_mapIndex.find(m_testerCount.at ( i ).first))
 	float k=2;
 	float b=0.75;
 	float calc_tf = 1.0 * m_testerCount.at ( i ).second.at ( 0 ) / m_documentQuerySize ;
@@ -711,12 +699,3 @@ void tfidf::addDatas(myIndex & query, myIndex & l_index, int ngramSize, unsigned
     cerr << ".OK!"<<endl;
     m_ngramCount = cpt_ngramVec;
 }
-
-
-// size_t tfidf::hashValue ( string key )
-// {
-// 
-//     boost::hash<string> hasher;
-//     return hasher ( key );
-// 
-// }
