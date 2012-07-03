@@ -904,11 +904,11 @@ void similarity::calculateSimilarity(myIndex& data_index, myIndex& dev_index, st
         exit(0);
     }
 //     copy(m_similarityContent.begin(), m_similarityContent.end(), ostream_iterator<string>(cerr,"\n"));cerr <<endl;
-    int l_vsInc=0;
+//     int l_vsInc=0;
     int l_docInc=0;
     int l_contentInc=0;
-    int l_dataSimVecInc=0;
-    float l_sumSquareContent=0.0;
+//     int l_dataSimVecInc=0;
+//     float l_sumSquareContent=0.0;
     int l_contentSize=(int)m_similarityContent.size();
     vector <string> l_doc;
     vector<float> l_contentSimResultVector;
@@ -1001,11 +1001,11 @@ void similarity::calculateSimilarity(myIndex& data_index, myIndex& dev_index, st
         exit(0);
     }
 //     copy(m_similarityContent.begin(), m_similarityContent.end(), ostream_iterator<string>(cerr,"\n"));cerr <<endl;
-    int l_vsInc=0;
+//     int l_vsInc=0;
     int l_docInc=0;
     int l_contentInc=0;
-    int l_dataSimVecInc=0;
-    float l_sumSquareContent=0.0;
+//     int l_dataSimVecInc=0;
+//     float l_sumSquareContent=0.0;
     int l_contentSize=(int)m_similarityContent.size();
     vector <string> l_doc;
     vector<float> l_contentSimResultVector;
