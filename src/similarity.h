@@ -45,6 +45,7 @@ using namespace Tools;
 	    void calculateSimilarity(myIndex & data_index, string s, int ngramSize);
 	    void calculateSimilarity(myIndex & data_index, string s, int ngramSize, int nbest);
 	    void calculateSimilarity(myIndex & data_index, myIndex & dev_index, string s, int ngramSize, int nbest);
+	    void calculateSimilarity(myIndex & data_index, myIndex & dev_index, string s, int ngramSize);
 	    void sortResults();
 	    void sortResults(int indiceMax);
 	    string printResults();

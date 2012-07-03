@@ -978,6 +978,104 @@ void similarity::calculateSimilarity(myIndex& data_index, myIndex& dev_index, st
 
 }
 
+void similarity::calculateSimilarity(myIndex& data_index, myIndex& dev_index, string s, int ngramSize)
+{
+    if ((int)m_similarityContent.size()==0)
+    {
+        cerr << "ERROR similarity::calculateSimilarity : "<< endl << "m_similiratyContent is empty" <<endl << "END ERROR MESSAGE" <<endl;
+        exit(0);
+    }
+    if ((int)m_docNames.size()==0)
+    {
+        cerr << "ERROR similarity::calculateSimilarity : "<< endl << "m_docNames is empty" <<endl << "END ERROR MESSAGE" <<endl;
+        exit(0);
+    }
+    if ((int)data_index.getMyReverseIndex().size()==0)
+    {
+        cerr << "ERROR similarity::calculateSimilarity : "<< endl << "empty datas" <<endl << "END ERROR MESSAGE" <<endl;
+        exit(0);
+    }
+    if ((int)dev_index.getMyReverseIndex().size()==0)
+    {
+        cerr << "ERROR similarity::calculateSimilarity : "<< endl << "empty dev" <<endl << "END ERROR MESSAGE" <<endl;
+        exit(0);
+    }
+//     copy(m_similarityContent.begin(), m_similarityContent.end(), ostream_iterator<string>(cerr,"\n"));cerr <<endl;
+    int l_vsInc=0;
+    int l_docInc=0;
+    int l_contentInc=0;
+    int l_dataSimVecInc=0;
+    float l_sumSquareContent=0.0;
+    int l_contentSize=(int)m_similarityContent.size();
+    vector <string> l_doc;
+    vector<float> l_contentSimResultVector;
+    vector < vector<float> > l_dataSimResultVector((int)data_index.getMyReverseIndex().size());
+//     vector < vector<float> > l_contentSimResultVector;
+    vector <unsigned long> l_contentSimVector(l_contentSize,0);
+    vector < vector <unsigned long> > l_devSimVector((int)dev_index.getMyReverseIndex().size());
+    vector < vector <unsigned long> > l_dataSimVector((int)data_index.getMyReverseIndex().size());
+    // initialisation du vecteur de similarité coté source (on y mets les comptes de l'input)
+    m_similarityVector.resize((int)data_index.getMyReverseIndex().size());
+// 	vector<float> tmp2((int)data_index.getMyReverseIndex().size());
+    m_similarityResult.resize((int)data_index.getMyReverseIndex().size());
+//
+//	#pragma omp parallel for
+    m_data_index = & data_index;
+    for (l_contentInc=0; l_contentInc< l_contentSize; l_contentInc++)
+    {
+        l_doc=stringToVector(s," ");
+        for (l_docInc=0; l_docInc + ngramSize < (int)l_doc.size() ; l_docInc++)
+        {
+            string l_ngram_test = vectorToString ( subVector ( l_doc, l_docInc, l_docInc + ngramSize ), " " );
+            if (m_similarityContentIds.at(l_contentInc)==hashValueBoost(l_ngram_test))
+            {
+                l_contentSimVector.at(l_contentInc)=l_contentSimVector.at(l_contentInc)+1;
+                // 			l_dataSimVector.at(l_contentInc)=1;
+            }
+        }
+    }
+    int l_incVecDev=0;
+    int l_incVecDoc=0;
+    // creation du vecteurs de similarité de la requete & construction des vecteurs du dev.
+    for (l_incVecDev=0; l_incVecDev< (int)l_devSimVector.size(); l_incVecDev++)
+    {
+	vector <unsigned long> l_l_devSimVector(l_contentSize,0);
+	for (l_contentInc=0; l_contentInc< l_contentSize; l_contentInc++)
+	{
+	    l_l_devSimVector.at(l_contentInc)=dev_index.getReversInfos(l_incVecDev,m_similarityContentIds.at(l_contentInc));
+	}
+	l_devSimVector.at(l_incVecDev)=l_l_devSimVector;
+	l_contentSimResultVector.push_back(evaluate_sim(l_contentSimVector,l_l_devSimVector));
+	
+    }
+    // creation des vecteurs de similarité des docs & construction des vecteurs des docs.
+    for (l_incVecDoc=0; l_incVecDoc< (int)l_devSimVector.size(); l_incVecDoc++)
+    {
+	vector <unsigned long> l_l_dataSimVector(l_contentSize,0);
+	for (l_contentInc=0; l_contentInc< l_contentSize; l_contentInc++)
+	{
+	    l_l_dataSimVector.at(l_contentInc)=dev_index.getReversInfos(l_incVecDoc,m_similarityContentIds.at(l_contentInc));
+	}
+	l_dataSimVector.at(l_incVecDoc)=l_l_dataSimVector;
+	vector<float> l_l_dataSimResultVector;
+	for (l_incVecDev=0; l_incVecDev< (int)l_devSimVector.size(); l_incVecDev++)
+	{
+	    vector <unsigned long> l_l_devSimVector=l_devSimVector.at(l_incVecDev);
+	    l_l_dataSimResultVector.push_back(evaluate_sim(l_l_dataSimVector,l_l_devSimVector));
+	}
+	l_dataSimResultVector.push_back(l_l_dataSimResultVector);
+	// calcult de similarité entre le vecteur de la requete et celui du doc puis sotckage dans m_similarityResult
+	m_similarityResult.at(l_incVecDoc)=evaluate_sim(l_contentSimResultVector,l_l_dataSimResultVector);
+    }
+    
+    if (!m_noSort)
+    {
+        sortResults();
+    }
+
+}
+
+
 float similarity::evaluate_sim(std::vector< unsigned long > l_vec_src, std::vector< unsigned long > l_vec_tgt)
 {
     float l_prodVect=0.0;
