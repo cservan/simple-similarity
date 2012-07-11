@@ -604,7 +604,7 @@ void tfidf::compileDataOkapibm25()
     multimap< unsigned long, unsigned long > :: iterator element=m_mapDocSize.begin();
     float avgDocSize=0;
     long nbrdoc=0;
-    cerr << "m_mapDocSize.size() is "<<(int)m_mapDocSize.size() << endl;
+//     cerr << "m_mapDocSize.size() is "<<(int)m_mapDocSize.size() << endl;
     for (element=m_mapDocSize.begin();element!=m_mapDocSize.end(); element++)
     {
       avgDocSize=+(*element).second;
@@ -706,5 +706,5 @@ void tfidf::addDatas(myIndex & query, myIndex & l_index, int ngramSize, unsigned
     }    
     cerr << ".OK!"<<endl;
     m_ngramCount = cpt_ngramVec;
-    cerr << "m_mapDocSize.size() is "<<(int)m_mapDocSize.size() << endl;
+//     cerr << "m_mapDocSize.size() is "<<(int)m_mapDocSize.size() << endl;
 }
