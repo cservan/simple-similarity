@@ -334,7 +334,8 @@ vector <string> list_directory(string dir)
 //           std::cout << dir_itr->path().filename() << "\n";
 //                     to_return.push_back(full_path.string()+"/"+dir_itr->path().filename());
 		    string l_full_path=full_path.string();
-		    string l_filename=dir_itr->path().filename();
+//		    string l_filename=dir_itr->path().filename().string(); // for boost 1.45+
+		    string l_filename=dir_itr->path().filename(); // for boost 1.44
                     to_return.push_back(l_full_path+"/"+l_filename);
                 }
                 else
@@ -745,7 +746,10 @@ bool fileByFile_similarity_calculation(parametres l_p )
         cerr << "Add data for TF.IDF/Okapi bm25 calculation"<<endl;
 // 	copy(inputContent.begin(),inputContent.end(),ostream_iterator<string>(cerr,"|\n"));cerr<<endl;
 // 	exit(0);
-	
+	if (l_p.bm25)
+	{
+	    l_myIndex.compileComplementDataForOkapi();
+	}
         l_tfidf.addDatas(l_myIndexQuery, l_myIndex,l_p.ngramSize, (unsigned long)fileNames.size()+1);
 //         cerr << "Compile data and made the TF.IDF calculation"<<endl;
 	if (l_p.bm25)
@@ -1045,7 +1049,10 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
         {
 //             cerr << "DO the TF.IDF calculation"<<endl;
 //             l_tfidf.addDatas(l_myIndexQuery, l_myIndex,l_p.ngramSize, );
-
+	    if (l_p.bm25)
+	    {
+		l_myIndex.compileComplementDataForOkapi();
+	    }
 	    l_tfidf.addDatas(l_myIndexQuery,l_myIndex,l_p.ngramSize,(int)docNames.size()+1);
 //             l_tfidf.addDatas(stringContent, inputContent,l_p.ngramSize);
 	    if (l_p.bm25)

@@ -604,12 +604,19 @@ void tfidf::compileDataOkapibm25()
     multimap< unsigned long, unsigned long > :: iterator element=m_mapDocSize.begin();
     float avgDocSize=0;
     long nbrdoc=0;
+    cerr << "m_mapDocSize.size() is "<<(int)m_mapDocSize.size() << endl;
     for (element=m_mapDocSize.begin();element!=m_mapDocSize.end(); element++)
     {
       avgDocSize=+(*element).second;
       nbrdoc++;
     }
+    if (nbrdoc==0)
+    {
+	cerr << "ERROR tfidf::compileDataOkapibm25 : nbrdoc == "<<  nbrdoc << " no doc loaded ? " << endl;
+	exit ( 0 );	    
+    }
     avgDocSize=avgDocSize/(1.0*nbrdoc);
+    
     for ( int i = 0; i < ( int ) m_testerCount.size(); i++ )
     {
 	float k=2;
@@ -631,9 +638,10 @@ void tfidf::compileDataOkapibm25()
 	{
 	    cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl;
 	    cerr<< i << "\t" ;
+	    cerr << "avgDocSize: "<< avgDocSize <<endl;
 	    cerr<<"calc_tf: "<< calc_tf <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_documentQuerySize <<endl;
-	    cerr<<"calc_tf_bm25: "<< calc_tf_bm25 <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_ngramCount.at ( m_testerNgramInfos.at ( i ).second) <<endl;
-	    cerr << "calc_idf_bm25: " << calc_idf_bm25 << " = log( " << m_documentSize << " / " << presDoc << endl;
+	    cerr<<"calc_tf_bm25: "<< calc_tf_bm25 <<" = 1.0 * " << calc_tf <<" * " << (k+1) << "(" <<(1.0 * calc_tf * (k+1)) << ")" << " / " <<  (calc_tf + k * ( 1-b + b*( m_documentQuerySize / avgDocSize )))<<endl;
+	    cerr << "calc_idf_bm25: " << calc_idf_bm25 << " = log( " << m_documentSize << " / " << presDoc <<")" <<endl;
 	    cerr<<"END_DEBUGMODE"<<endl;
 	}	
         vecIdf.push_back ( calc_idf_bm25 );
@@ -698,4 +706,5 @@ void tfidf::addDatas(myIndex & query, myIndex & l_index, int ngramSize, unsigned
     }    
     cerr << ".OK!"<<endl;
     m_ngramCount = cpt_ngramVec;
+    cerr << "m_mapDocSize.size() is "<<(int)m_mapDocSize.size() << endl;
 }
