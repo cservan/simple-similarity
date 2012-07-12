@@ -135,7 +135,7 @@ void tfidf::addDatas ( vector< string > s, int ngramSize )
         cpt_ngramVec.at ( incFile ) = 0;
     }
 
-    for ( incFile = 0; incFile < m_documentSize; incFile++ )
+    for ( incFile = 0; incFile < (int)m_documentSize; incFile++ )
     {
         cerr << ".";
 	boost::progress_timer t( std::clog );
@@ -240,7 +240,7 @@ void tfidf::addDatas ( string inputs, vector< string > data, int ngramSize )
         cpt_ngramVec.at ( incFile ) = 0;
     }
 
-    for ( incFile = 0; incFile < m_documentSize; incFile++ )
+    for ( incFile = 0; incFile < (int)m_documentSize; incFile++ )
     {
         cerr << ".";
 // 	cerr << "document "<< incFile <<endl;
@@ -475,7 +475,7 @@ string tfidf::printDatasSorted(int nbest)
         cerr << "ERROR tfidf::printDatasSorted : m_vec_infos_pairs size is null" << endl;
         exit ( 1 );
     }
-	cerr << "tri de "<< (int)m_vec_infos_pairs.size() <<endl;
+// 	cerr << "tri de "<< (int)m_vec_infos_pairs.size() <<endl;
     std::sort ( m_vec_infos_pairs.begin(), m_vec_infos_pairs.end(), mySortingFunction4 );
     s << "Position\tIds\thash\tmot\tTF.IDF\tTF\tIDF" << endl;
     for ( int l_pos = 0; l_pos < ( int ) m_vec_infos_pairs.size() && l_pos < nbest; l_pos++ )
@@ -607,7 +607,8 @@ void tfidf::compileDataOkapibm25()
 //     cerr << "m_mapDocSize.size() is "<<(int)m_mapDocSize.size() << endl;
     for (element=m_mapDocSize.begin();element!=m_mapDocSize.end(); element++)
     {
-      avgDocSize=+(*element).second;
+      avgDocSize=avgDocSize+(*element).second;
+//       cerr << "(*element).second "<< (*element).second << endl;
       nbrdoc++;
     }
     if (nbrdoc==0)
@@ -615,8 +616,9 @@ void tfidf::compileDataOkapibm25()
 	cerr << "ERROR tfidf::compileDataOkapibm25 : nbrdoc == "<<  nbrdoc << " no doc loaded ? " << endl;
 	exit ( 0 );	    
     }
+//     cerr <<"AVERAGE DOC SIZE : "<< avgDocSize << " / "<< nbrdoc <<" = ";
     avgDocSize=avgDocSize/(1.0*nbrdoc);
-    
+//     cerr << avgDocSize << endl;
     for ( int i = 0; i < ( int ) m_testerCount.size(); i++ )
     {
 	float k=2;
@@ -641,6 +643,7 @@ void tfidf::compileDataOkapibm25()
 	    cerr << "avgDocSize: "<< avgDocSize <<endl;
 	    cerr<<"calc_tf: "<< calc_tf <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_documentQuerySize <<endl;
 	    cerr<<"calc_tf_bm25: "<< calc_tf_bm25 <<" = 1.0 * " << calc_tf <<" * " << (k+1) << "(" <<(1.0 * calc_tf * (k+1)) << ")" << " / " <<  (calc_tf + k * ( 1-b + b*( m_documentQuerySize / avgDocSize )))<<endl;
+	    cerr<<"calc_tf_bm25: "<< calc_tf_bm25 <<" = 1.0 * " << calc_tf <<" * " << (k+1) << "(" <<(1.0 * calc_tf * (k+1)) << ")" << " / " <<  "(" << calc_tf << "+" << k << "*" << "(" << 1-b << "+" << b<< "* (" << m_documentQuerySize << "/" <<  avgDocSize << ")))"<<endl;
 	    cerr << "calc_idf_bm25: " << calc_idf_bm25 << " = log( " << m_documentSize << " / " << presDoc <<")" <<endl;
 	    cerr<<"END_DEBUGMODE"<<endl;
 	}	

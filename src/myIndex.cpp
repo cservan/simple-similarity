@@ -149,7 +149,7 @@ void myIndex::compileComplementDataForOkapi()
 	unsigned long l_docSize=0;
 	for (r_it_element=element.begin(); r_it_element!=element.end(); r_it_element++)
 	{
-	    l_docSize=+(*r_it_element).second;
+	    l_docSize=l_docSize+(*r_it_element).second;
 	}
 	pair <unsigned long, unsigned long> l_tmp((*r_it).first,l_docSize);
 	m_mapDocSize.insert(l_tmp);

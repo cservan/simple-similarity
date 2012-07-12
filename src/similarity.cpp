@@ -1037,6 +1037,8 @@ void similarity::calculateSimilarity(myIndex& data_index, myIndex& dev_index, st
     int l_incVecDev=0;
     int l_incVecDoc=0;
     // creation du vecteurs de similarité de la requete & construction des vecteurs du dev.
+//     cerr << "content vector :";
+//         copy(l_contentSimVector.begin(), l_contentSimVector.end(), ostream_iterator<int>(cerr,"\t"));cerr <<endl;
     for (l_incVecDev=0; l_incVecDev< (int)l_devSimVector.size(); l_incVecDev++)
     {
 	vector <unsigned long> l_l_devSimVector(l_contentSize,0);
@@ -1044,17 +1046,21 @@ void similarity::calculateSimilarity(myIndex& data_index, myIndex& dev_index, st
 	{
 	    l_l_devSimVector.at(l_contentInc)=dev_index.getReversInfos(l_incVecDev,m_similarityContentIds.at(l_contentInc));
 	}
-	l_devSimVector.at(l_incVecDev)=l_l_devSimVector;
-	l_contentSimResultVector.push_back(evaluate_sim(l_contentSimVector,l_l_devSimVector));
-	
+	l_devSimVector.at(l_incVecDev)=l_l_devSimVector;	
+// 	cerr << "dev     vector :";
+//         copy(l_l_devSimVector.begin(), l_l_devSimVector.end(), ostream_iterator<int>(cerr,"\t"));cerr <<endl;
+	float l_result=evaluate_sim(l_contentSimVector,l_l_devSimVector);
+// 	cerr << "result : " << l_result<<endl;
+	l_contentSimResultVector.push_back(l_result);
     }
+
     // creation des vecteurs de similarité des docs & construction des vecteurs des docs.
-    for (l_incVecDoc=0; l_incVecDoc< (int)l_devSimVector.size(); l_incVecDoc++)
+    for (l_incVecDoc=0; l_incVecDoc< (int)l_dataSimVector.size(); l_incVecDoc++)
     {
 	vector <unsigned long> l_l_dataSimVector(l_contentSize,0);
 	for (l_contentInc=0; l_contentInc< l_contentSize; l_contentInc++)
 	{
-	    l_l_dataSimVector.at(l_contentInc)=dev_index.getReversInfos(l_incVecDoc,m_similarityContentIds.at(l_contentInc));
+	    l_l_dataSimVector.at(l_contentInc)=data_index.getReversInfos(l_incVecDoc,m_similarityContentIds.at(l_contentInc));
 	}
 	l_dataSimVector.at(l_incVecDoc)=l_l_dataSimVector;
 	vector<float> l_l_dataSimResultVector;
@@ -1081,7 +1087,7 @@ float similarity::evaluate_sim(std::vector< unsigned long > l_vec_src, std::vect
     float l_prodVect=0.0;
     float l_sumSquare_01=0.0;
     float l_sumSquare_02=0.0;
-    int l_countContent=0;
+//     int l_countContent=0;
     int l_countDoc=0;
     int l_vecInc;
     if (l_vec_src.size()!=l_vec_tgt.size())
@@ -1093,8 +1099,8 @@ float similarity::evaluate_sim(std::vector< unsigned long > l_vec_src, std::vect
     {
         l_prodVect=l_prodVect+1.0*l_vec_src.at(l_vecInc)*l_vec_tgt.at(l_vecInc);
         l_sumSquare_02=l_sumSquare_02+1.0*l_vec_tgt.at(l_vecInc)*l_vec_tgt.at(l_vecInc);
-	l_sumSquare_01=l_sumSquare_01+1.0*l_vec_tgt.at(l_vecInc)*l_vec_tgt.at(l_vecInc);
-        l_countContent=l_countContent+l_vec_src.at(l_vecInc);
+	l_sumSquare_01=l_sumSquare_01+1.0*l_vec_src.at(l_vecInc)*l_vec_src.at(l_vecInc);
+//         l_countContent=l_countContent+l_vec_src.at(l_vecInc);
         l_countDoc=l_countDoc+l_vec_tgt.at(l_vecInc);
     }
     l_sumSquare_01=sqrt(l_sumSquare_01);
@@ -1130,20 +1136,20 @@ float similarity::evaluate_sim(std::vector< float > l_vec_src, std::vector< floa
     float l_prodVect=0.0;
     float l_sumSquare_01=0.0;
     float l_sumSquare_02=0.0;
-    int l_countContent=0;
+//     int l_countContent=0;
     int l_countDoc=0;
     int l_vecInc;
     if (l_vec_src.size()!=l_vec_tgt.size())
     {
-	cerr << "ERROR similarity::evaluate_sim(float,float) : "<< endl << "Vector size differs " << (int)l_vec_src.size()<<" Vs. "<< (int)l_vec_tgt.size()<<  endl;
+	cerr << "ERROR similarity::evaluate_sim(int,int) : "<< endl << "Vector size differs " << (int)l_vec_src.size()<<" Vs. "<< (int)l_vec_tgt.size()<<  endl;
 	exit(1);
     }
     for (l_vecInc=0; l_vecInc< (int)l_vec_tgt.size(); l_vecInc++)
     {
         l_prodVect=l_prodVect+1.0*l_vec_src.at(l_vecInc)*l_vec_tgt.at(l_vecInc);
         l_sumSquare_02=l_sumSquare_02+1.0*l_vec_tgt.at(l_vecInc)*l_vec_tgt.at(l_vecInc);
-	l_sumSquare_01=l_sumSquare_01+1.0*l_vec_tgt.at(l_vecInc)*l_vec_tgt.at(l_vecInc);
-        l_countContent=l_countContent+l_vec_src.at(l_vecInc);
+	l_sumSquare_01=l_sumSquare_01+1.0*l_vec_src.at(l_vecInc)*l_vec_src.at(l_vecInc);
+//         l_countContent=l_countContent+l_vec_src.at(l_vecInc);
         l_countDoc=l_countDoc+l_vec_tgt.at(l_vecInc);
     }
     l_sumSquare_01=sqrt(l_sumSquare_01);

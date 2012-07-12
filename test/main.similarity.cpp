@@ -158,7 +158,7 @@ void readCommandLineArguments ( unsigned int argc, char *argv[] , parametres & p
         else if ( s.find ( "--vectSim" ) == 0 )
         {
             p.vectSim = true;
-	    p.devDir = infos;
+            p.devDir = infos;
         }
         else if ( s.find ( "--lengthRatio" ) == 0 )
         {
@@ -318,7 +318,7 @@ vector <string> list_directory(string dir)
         std::cout << "\nIn directory: "
                   << full_path.string() << "\n\n";
         fs::directory_iterator end_iter;
-        for ( fs::directory_iterator dir_itr( full_path );dir_itr != end_iter; ++dir_itr )
+        for ( fs::directory_iterator dir_itr( full_path ); dir_itr != end_iter; ++dir_itr )
         {
             try
             {
@@ -333,9 +333,9 @@ vector <string> list_directory(string dir)
                     ++file_count;
 //           std::cout << dir_itr->path().filename() << "\n";
 //                     to_return.push_back(full_path.string()+"/"+dir_itr->path().filename());
-		    string l_full_path=full_path.string();
-//		    string l_filename=dir_itr->path().filename().string(); // for boost 1.45+
-		    string l_filename=dir_itr->path().filename(); // for boost 1.44
+                    string l_full_path=full_path.string();
+                    string l_filename=dir_itr->path().filename().string(); // for boost 1.44
+// 		    string l_filename=dir_itr->path().filename(); // for boost 1.45+
                     to_return.push_back(l_full_path+"/"+l_filename);
                 }
                 else
@@ -378,7 +378,7 @@ string getTime()
 
 void run_thread(myIndex & l_myIndex, string test, int i, parametres l_p)
 {
-	l_myIndex.addIndex(test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
+    l_myIndex.addIndex(test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
 }
 
 bool fileByFile_similarity_calculation(parametres l_p )
@@ -398,7 +398,7 @@ bool fileByFile_similarity_calculation(parametres l_p )
     myIndex l_myIndexQuery;
     if (l_p.debugMode)
     {
-	cerr << "WARNING: DEBUGMODE ON, it could be very verbose !!! "<< endl;
+        cerr << "WARNING: DEBUGMODE ON, it could be very verbose !!! "<< endl;
     }
     l_tfidf.setDebugMode(l_p.debugMode);
     if ((int)l_p.stopWordsList.length()>0)
@@ -419,9 +419,9 @@ bool fileByFile_similarity_calculation(parametres l_p )
 
 //     list_directory(l_p.directoryDataName);
 //     return 0;
-    
-    
-        vector<string> fileNames=list_directory(l_p.directoryDataName);
+
+
+    vector<string> fileNames=list_directory(l_p.directoryDataName);
 
     cerr << "Chargement des docs...\n";
 //     vector<string> fileNames=stringToVector(l_p.inputFileName, ",");
@@ -436,8 +436,8 @@ bool fileByFile_similarity_calculation(parametres l_p )
     for (int i=0; i<(int)fileNames.size(); i++)
     {
 //         cerr <<".";
-	cerr << "Chargement de " <<  fileNames.at(i) << "\t";
-	boost::progress_timer t( std::clog );
+        cerr << "Chargement de " <<  fileNames.at(i) << "\t";
+        boost::progress_timer t( std::clog );
         ifstream data ( fileNames.at(i).c_str() );
         if ( !data.is_open() )
         {
@@ -489,57 +489,57 @@ bool fileByFile_similarity_calculation(parametres l_p )
         stringContent=vectorToString(to_keep_content," ");
 
 
-	int tenPercent=(int)to_keep_content.size()/10;
-	int onePercent=(int)to_keep_content.size()/100;
-	if (onePercent==0)
-	{
-	    onePercent=1;
-	}
-	if (tenPercent==0)
-	{
-	    tenPercent=1;
-	}
-	int fullSize=( int ) to_keep_content.size() - l_p.ngramSize-1;
- 	boost::thread_group m_threads;
+        int tenPercent=(int)to_keep_content.size()/10;
+        int onePercent=(int)to_keep_content.size()/100;
+        if (onePercent==0)
+        {
+            onePercent=1;
+        }
+        if (tenPercent==0)
+        {
+            tenPercent=1;
+        }
+        int fullSize=( int ) to_keep_content.size() - l_p.ngramSize-1;
+        boost::thread_group m_threads;
 // 	cerr << "onePercent :" << onePercent << endl;
 // 	m_threads.create_thread(boost::bind(&similarity::evaluate , this, l_vsInc));
 //	#pragma omp parallel for shared (l_myIndex) num_threads(2)
 //	rien
         for ( int l_pos = 0; l_pos <= fullSize; l_pos++ )
         {
-	    if (fullSize>100)
-	    {
+            if (fullSize>100)
+            {
 // 	    boost::progress_timer t2( std::clog );
-		if ( l_pos  % onePercent  == 0 )
-		{
-		    cerr << ".";
+                if ( l_pos  % onePercent  == 0 )
+                {
+                    cerr << ".";
 // 		    m_threads.join_all();
-		}
-		if ( l_pos  % tenPercent  == 0 )
+                }
+                if ( l_pos  % tenPercent  == 0 )
                 {
 //                    cerr << ".";
-                  m_threads.join_all();
+                    m_threads.join_all();
                 }
-	    }
+            }
             string l_ngram_test = vectorToString ( subVector ( to_keep_content, l_pos, l_pos + l_p.ngramSize ), " " );
 // 	    string l_ngram_test2 = vectorToString ( subVector ( to_keep_content, l_pos+1, l_pos+1 + l_p.ngramSize ), " " );
 //		void run_thread(myIndex & l_myIndex, string test, int i, parametres l_p)
 // 	    m_threads.create_thread(boost::bind(&myIndex:F:addIndex,l_myIndex,l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation));
 // 	    m_threads.create_thread(boost::bind(&myIndex::addIndex,l_myIndex,l_ngram_test2, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation));
 //            l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
-           l_myIndex.addIndex(l_ngram_test, i, false, l_p.SimilarityCalulation); //correction made for TF calculation.
+            l_myIndex.addIndex(l_ngram_test, i, false, l_p.SimilarityCalulation); //correction made for TF calculation.
         }
-	m_threads.join_all();
-	inputContent.push_back(stringContent);
+        m_threads.join_all();
+        inputContent.push_back(stringContent);
         data.close();
     }
     cerr << "Taille : "<<l_myIndex.getMyIndex().size() << endl;
-    
+
     if (l_p.vectSim)
     {
-    vector<string> fileNamesDev=list_directory(l_p.devDir);
+        vector<string> fileNamesDev=list_directory(l_p.devDir);
 
-    cerr << "Chargement des docs du dev...\n";
+        cerr << "Chargement des docs du dev...\n";
 //     vector<string> fileNames=stringToVector(l_p.inputFileName, ",");
 
 //     copy(fileNames.begin(),fileNames.end(),ostream_iterator<string>(cerr,"|\n"));cerr<<endl;
@@ -549,107 +549,107 @@ bool fileByFile_similarity_calculation(parametres l_p )
 
 //     boost::regex regEx ( "[\\.\\,\\;\\:\\/\\!\?\\(\\)\\[\\]\"\'\\+\\=\\*]+" );
 //     boost::regex regEx ( "[\\.\\,\\;\\:\\/\\!\?\\(\\)\\[\\]\"\'\\+\\=\\*\\<\\>\\_\\$\\^\\-’»«]+" );
-    for (int i=0; i<(int)fileNamesDev.size(); i++)
-    {
+        for (int i=0; i<(int)fileNamesDev.size(); i++)
+        {
 //         cerr <<".";
-	cerr << "Chargement de " <<  fileNamesDev.at(i) << "\t";
-	boost::progress_timer t( std::clog );
-        ifstream data ( fileNamesDev.at(i).c_str() );
-        if ( !data.is_open() )
-        {
-            cerr << "ERROR : main : can't open file : " <<  fileNamesDev.at(i) << " "<< endl ;
-            exit ( 0 );
-        }
-        int cpt=0;
-        string stringContent="";
-        while ( getline ( data, buffer ) )
-        {
-            stringContent+=lowerCase(buffer)+" ";
-            cpt++;
-        }
-        vector<string> to_keep;
-        if ((int)stopWords.size()>0)
-        {
-            vector <string> tmp=stringToVector(stringContent," ");
-            to_keep.clear();
-            for (int i =0; i< (int) tmp.size(); i++)
+            cerr << "Chargement de " <<  fileNamesDev.at(i) << "\t";
+            boost::progress_timer t( std::clog );
+            ifstream data ( fileNamesDev.at(i).c_str() );
+            if ( !data.is_open() )
             {
-                bool doWekeep=true;
-                for (int k =0; k< (int) stopWords.size(); k++)
+                cerr << "ERROR : main : can't open file : " <<  fileNamesDev.at(i) << " "<< endl ;
+                exit ( 0 );
+            }
+            int cpt=0;
+            string stringContent="";
+            while ( getline ( data, buffer ) )
+            {
+                stringContent+=lowerCase(buffer)+" ";
+                cpt++;
+            }
+            vector<string> to_keep;
+            if ((int)stopWords.size()>0)
+            {
+                vector <string> tmp=stringToVector(stringContent," ");
+                to_keep.clear();
+                for (int i =0; i< (int) tmp.size(); i++)
                 {
-                    // 	    boost::regex regEx ( "([œa-zéàùuïîêè\\-0-9]+\\["+l_p.pos.at(k)+"\\])" );
-                    // 		boost::match_results<string::const_iterator> vectorFilter;
-                    if (tmp.at(i).compare(stopWords.at(k))==0)
+                    bool doWekeep=true;
+                    for (int k =0; k< (int) stopWords.size(); k++)
                     {
-                        doWekeep=false;
-                        //         	    cerr << tmp.at(i) << "|" << stopWords.at(k) << "|" << (int)tmp.at(i).compare(stopWords.at(k)) << endl;
+                        // 	    boost::regex regEx ( "([œa-zéàùuïîêè\\-0-9]+\\["+l_p.pos.at(k)+"\\])" );
+                        // 		boost::match_results<string::const_iterator> vectorFilter;
+                        if (tmp.at(i).compare(stopWords.at(k))==0)
+                        {
+                            doWekeep=false;
+                            //         	    cerr << tmp.at(i) << "|" << stopWords.at(k) << "|" << (int)tmp.at(i).compare(stopWords.at(k)) << endl;
+                        }
+                    }
+                    if (doWekeep)
+                    {
+                        to_keep.push_back(tmp.at(i));
                     }
                 }
-                if (doWekeep)
+                stringContent=vectorToString(to_keep," ");
+            }
+            vector <string> analyse_content=stringToVector(stringContent," ");
+            vector <string> to_keep_content;
+            for (int i =0; i< (int) analyse_content.size(); i++)
+            {
+                boost::match_results<string::const_iterator> vectorFilter;
+                if (!boost::regex_match ( analyse_content.at(i), vectorFilter, regEx, boost::match_default) && analyse_content.at(i).size()>1)
                 {
-                    to_keep.push_back(tmp.at(i));
+                    to_keep_content.push_back(analyse_content.at(i));
                 }
             }
-            stringContent=vectorToString(to_keep," ");
-        }
-        vector <string> analyse_content=stringToVector(stringContent," ");
-        vector <string> to_keep_content;
-        for (int i =0; i< (int) analyse_content.size(); i++)
-        {
-            boost::match_results<string::const_iterator> vectorFilter;
-            if (!boost::regex_match ( analyse_content.at(i), vectorFilter, regEx, boost::match_default) && analyse_content.at(i).size()>1)
+            stringContent=vectorToString(to_keep_content," ");
+
+
+            int tenPercent=(int)to_keep_content.size()/10;
+            int onePercent=(int)to_keep_content.size()/100;
+            if (onePercent==0)
             {
-                to_keep_content.push_back(analyse_content.at(i));
+                onePercent=1;
             }
-        }
-        stringContent=vectorToString(to_keep_content," ");
-
-
-	int tenPercent=(int)to_keep_content.size()/10;
-	int onePercent=(int)to_keep_content.size()/100;
-	if (onePercent==0)
-	{
-	    onePercent=1;
-	}
-	if (tenPercent==0)
-	{
-	    tenPercent=1;
-	}
-	int fullSize=( int ) to_keep_content.size() - l_p.ngramSize-1;
+            if (tenPercent==0)
+            {
+                tenPercent=1;
+            }
+            int fullSize=( int ) to_keep_content.size() - l_p.ngramSize-1;
 //  	boost::thread_group m_threads;
 // 	cerr << "onePercent :" << onePercent << endl;
 // 	m_threads.create_thread(boost::bind(&similarity::evaluate , this, l_vsInc));
 //	#pragma omp parallel for shared (l_myIndex) num_threads(2)
 //	rien
-        for ( int l_pos = 0; l_pos <= fullSize; l_pos++ )
-        {
-	    if (fullSize>100)
-	    {
-// 	    boost::progress_timer t2( std::clog );
-		if ( l_pos  % onePercent  == 0 )
-		{
-		    cerr << ".";
-// 		    m_threads.join_all();
-		}
-		if ( l_pos  % tenPercent  == 0 )
+            for ( int l_pos = 0; l_pos <= fullSize; l_pos++ )
+            {
+                if (fullSize>100)
                 {
+// 	    boost::progress_timer t2( std::clog );
+                    if ( l_pos  % onePercent  == 0 )
+                    {
+                        cerr << ".";
+// 		    m_threads.join_all();
+                    }
+                    if ( l_pos  % tenPercent  == 0 )
+                    {
 //                    cerr << ".";
 //                   m_threads.join_all();
+                    }
                 }
-	    }
-            string l_ngram_test = vectorToString ( subVector ( to_keep_content, l_pos, l_pos + l_p.ngramSize ), " " );
+                string l_ngram_test = vectorToString ( subVector ( to_keep_content, l_pos, l_pos + l_p.ngramSize ), " " );
 // 	    string l_ngram_test2 = vectorToString ( subVector ( to_keep_content, l_pos+1, l_pos+1 + l_p.ngramSize ), " " );
 //		void run_thread(myIndex & l_myIndex, string test, int i, parametres l_p)
 // 	    m_threads.create_thread(boost::bind(&myIndex:F:addIndex,l_myIndex,l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation));
 // 	    m_threads.create_thread(boost::bind(&myIndex::addIndex,l_myIndex,l_ngram_test2, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation));
 //            l_myIndex.addIndex(l_ngram_test, i, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
-           l_myIndexDev.addIndex(l_ngram_test, i, false, l_p.SimilarityCalulation); //correction made for TF calculation.
-        }
+                l_myIndexDev.addIndex(l_ngram_test, i, false, l_p.SimilarityCalulation); //correction made for TF calculation.
+            }
 // 	m_threads.join_all();
-	inputContent.push_back(stringContent);
-        data.close();
-    }
-    cerr << "Taille du dev : "<<l_myIndexDev.getMyIndex().size() << endl;
+            inputContent.push_back(stringContent);
+            data.close();
+        }
+        cerr << "Taille du dev : "<<l_myIndexDev.getMyIndex().size() << endl;
     }
     ifstream inputs ( l_p.inputFileName.c_str() );
     if ( !inputs.is_open() )
@@ -746,20 +746,20 @@ bool fileByFile_similarity_calculation(parametres l_p )
         cerr << "Add data for TF.IDF/Okapi bm25 calculation"<<endl;
 // 	copy(inputContent.begin(),inputContent.end(),ostream_iterator<string>(cerr,"|\n"));cerr<<endl;
 // 	exit(0);
-	if (l_p.bm25)
-	{
-	    l_myIndex.compileComplementDataForOkapi();
-	}
+        if (l_p.bm25)
+        {
+            l_myIndex.compileComplementDataForOkapi();
+        }
         l_tfidf.addDatas(l_myIndexQuery, l_myIndex,l_p.ngramSize, (unsigned long)fileNames.size()+1);
 //         cerr << "Compile data and made the TF.IDF calculation"<<endl;
-	if (l_p.bm25)
-	{
-	    l_tfidf.compileDataOkapibm25();
-	}
-	else
-	{
-	    l_tfidf.compileData();
-	}
+        if (l_p.bm25)
+        {
+            l_tfidf.compileDataOkapibm25();
+        }
+        else
+        {
+            l_tfidf.compileData();
+        }
         //     cerr << "Affichage : "<< endl << l_tfidf.printDatas();
         //     return 0;
         cerr << "Ok !"<<endl;
@@ -778,16 +778,16 @@ bool fileByFile_similarity_calculation(parametres l_p )
     else
     {
         cerr << "Calcul de la similarité :"<<endl;
-	if (!l_p.TfIdfCalculation)
-	{
-	    l_similarity.addTfIdfData(l_tfidf.getContent(l_p.nbestReturned));
-	    l_similarity.addTfIdfDataIds(l_tfidf.getContentIds(l_p.nbestReturned));
-	}
-	else
-	{
-	    l_similarity.addTfIdfData(l_tfidf.getContent(l_p.nbestReturned));
-	    l_similarity.addTfIdfDataIds(l_tfidf.getContentIds(l_p.nbestReturned));
-	}
+        if (!l_p.TfIdfCalculation)
+        {
+            l_similarity.addTfIdfData(l_tfidf.getContent(l_p.nbestReturned));
+            l_similarity.addTfIdfDataIds(l_tfidf.getContentIds(l_p.nbestReturned));
+        }
+        else
+        {
+            l_similarity.addTfIdfData(l_tfidf.getContent(l_p.nbestReturned));
+            l_similarity.addTfIdfDataIds(l_tfidf.getContentIds(l_p.nbestReturned));
+        }
 //         if (!l_p.TfIdfCalculation)
 //         {
 //             l_similarity.addTfIdfData(stringToVector(stringContent," "));
@@ -797,23 +797,23 @@ bool fileByFile_similarity_calculation(parametres l_p )
 //             l_similarity.addTfIdfData(l_tfidf.getContent(l_p.nbestReturned));
 //         }
         cerr << "Fin d'ajout des données"<<endl;
-        
-	if (l_p.vectSim)
-	{
-	    l_similarity.calculateSimilarity(l_myIndex, l_myIndexDev ,stringContent,l_p.ngramSize);
-	}
-	else
-	{
-	    l_similarity.calculateSimilarity(l_myIndex, stringContent,l_p.ngramSize);
-	}
-	if (l_p.printFullResults)
-	{
-	    output << l_similarity.printResults(l_p.nbestSimReturned);
-	}
-	else
-	{
-	    output << l_similarity.printShortResults(l_p.nbestSimReturned);
-	}
+
+        if (l_p.vectSim)
+        {
+            l_similarity.calculateSimilarity(l_myIndex, l_myIndexDev ,stringContent,l_p.ngramSize);
+        }
+        else
+        {
+            l_similarity.calculateSimilarity(l_myIndex, stringContent,l_p.ngramSize);
+        }
+        if (l_p.printFullResults)
+        {
+            output << l_similarity.printResults(l_p.nbestSimReturned);
+        }
+        else
+        {
+            output << l_similarity.printShortResults(l_p.nbestSimReturned);
+        }
         cerr << "Ok !"<<endl;
     }
     output.close();
@@ -932,7 +932,7 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
 
 //     }
 
-//             l_myIndex.addIndex(l_ngram_test, cpt, l_p.TfIdfCalculation, l_p.SimilarityCalulation); 
+//             l_myIndex.addIndex(l_ngram_test, cpt, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
             l_myIndex.addIndex(l_ngram_test, cpt, false, l_p.SimilarityCalulation); // correction made on TF calculation
 // 	    size_t l_ngramHash = hashValueBoost ( l_ngram_test );
         }
@@ -952,7 +952,7 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
     ofstream output((l_p.outputFileName+".out").c_str());
     while ( getline ( inputs, buffer ) )
     {
-	myIndex l_myIndexQuery;
+        myIndex l_myIndexQuery;
         tfidf l_tfidf;
         stringContent=lowerCase(buffer)+" ";
         stringstream l_tmp_s;
@@ -1016,8 +1016,8 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
 
         }
         vector <string> l_indexVec=stringToVector(stringContent," ");
-	vector <string> l_testVec;
-	vector <size_t> l_testVecIds;
+        vector <string> l_testVec;
+        vector <size_t> l_testVecIds;
 // 	vector <size_t> l_indexVecIds(l_indexVec.size());
 //     to_keep.clear();
 
@@ -1026,12 +1026,12 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
             string l_ngram_test = vectorToString ( subVector ( l_indexVec, l_pos, l_pos + l_p.ngramSize ), " " );
 // 	    myIndex l_myIndex(l_ngram_test, i);
             l_myIndexQuery.addIndex(l_ngram_test, 0,true,true);
-	    l_testVec.push_back(l_ngram_test);
-	    l_testVecIds.push_back(hashValueBoost(l_ngram_test));
-	    
+            l_testVec.push_back(l_ngram_test);
+            l_testVecIds.push_back(hashValueBoost(l_ngram_test));
+
 // 	    size_t l_ngramHash = hashValueBoost ( l_ngram_test );
         }
-	
+
 // 	cerr << "DATA :" << endl;
 // 	cerr << l_myIndex.toString() << endl;
 // 	cerr << "QUERY :" << endl;
@@ -1049,20 +1049,20 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
         {
 //             cerr << "DO the TF.IDF calculation"<<endl;
 //             l_tfidf.addDatas(l_myIndexQuery, l_myIndex,l_p.ngramSize, );
-	    if (l_p.bm25)
-	    {
-		l_myIndex.compileComplementDataForOkapi();
-	    }
-	    l_tfidf.addDatas(l_myIndexQuery,l_myIndex,l_p.ngramSize,(int)docNames.size()+1);
+            if (l_p.bm25)
+            {
+                l_myIndex.compileComplementDataForOkapi();
+            }
+            l_tfidf.addDatas(l_myIndexQuery,l_myIndex,l_p.ngramSize,(int)docNames.size()+1);
 //             l_tfidf.addDatas(stringContent, inputContent,l_p.ngramSize);
-	    if (l_p.bm25)
-	    {
-		l_tfidf.compileDataOkapibm25();
-	    }
-	    else
-	    {
-		l_tfidf.compileData();
-	    }
+            if (l_p.bm25)
+            {
+                l_tfidf.compileDataOkapibm25();
+            }
+            else
+            {
+                l_tfidf.compileData();
+            }
             //     cerr << "Affichage : "<< endl << l_tfidf.printDatas();
             //     return 0;
             cerr << "Ok !"<<endl;
@@ -1091,28 +1091,28 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
             if (!l_p.TfIdfCalculation)
             {
                 l_similarity.addTfIdfData(l_tfidf.getContent(l_p.nbestReturned));
-		l_similarity.addTfIdfDataIds(l_tfidf.getContentIds(l_p.nbestReturned));
+                l_similarity.addTfIdfDataIds(l_tfidf.getContentIds(l_p.nbestReturned));
             }
             else
             {
                 l_similarity.addTfIdfData(l_tfidf.getContent(l_p.nbestReturned));
-		l_similarity.addTfIdfDataIds(l_tfidf.getContentIds(l_p.nbestReturned));
+                l_similarity.addTfIdfDataIds(l_tfidf.getContentIds(l_p.nbestReturned));
             }
             if (!l_p.TfIdfCalculation)
-	    {
+            {
                 l_similarity.addTfIdfData(l_testVec);
-		l_similarity.addTfIdfDataIds(l_testVecIds);
-	    }
+                l_similarity.addTfIdfDataIds(l_testVecIds);
+            }
             l_similarity.calculateSimilarity(l_myIndex, stringContent,l_p.ngramSize, l_p.nbestSimReturned);
 
-	if (l_p.printFullResults)
-	{
-	    output << l_similarity.printResults(l_p.nbestSimReturned);
-	}
-	else
-	{
-	    output << l_similarity.printShortResults(l_p.nbestSimReturned);
-	}
+            if (l_p.printFullResults)
+            {
+                output << l_similarity.printResults(l_p.nbestSimReturned);
+            }
+            else
+            {
+                output << l_similarity.printShortResults(l_p.nbestSimReturned);
+            }
             output << "========== END OF SIMILARITY SCORES ==========" <<endl;
         }
         output << "========== END OF SCORES ==========" <<endl;
