@@ -8,8 +8,8 @@ SET(CMAKE_VERBOSE_MAKEFILE ON)
 SET (CMAKE_CXX_FLAGS " -fopenmp ")
 #add_definitions(-DCMAKE_INSTALL_PREFIX=/lium/buster1/servan/Programmation/TERCpp)
 add_definitions(-DIBPP_LINUX -DIBPP_GCC -DINSTANTIATE_TEMPLATES )
-include_directories(/Data/Tools/include)
-link_directories(/Data/Tools/lib)
+include_directories(/lium/buster1/servan/Tools/include)
+link_directories(/lium/buster1/servan/Tools/lib)
 
 #add definitions, compiler switches, etc.
 ADD_DEFINITIONS(-Wall -O2  -DINSTANTIATE_TEMPLATES)
