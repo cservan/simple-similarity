@@ -334,8 +334,8 @@ vector <string> list_directory(string dir)
 //           std::cout << dir_itr->path().filename() << "\n";
 //                     to_return.push_back(full_path.string()+"/"+dir_itr->path().filename());
                     string l_full_path=full_path.string();
-                   string l_filename=dir_itr->path().filename().string(); // for boost 1.44
-//  		    string l_filename=dir_itr->path().filename(); // for boost 1.45+
+//                   string l_filename=dir_itr->path().filename().string(); // for boost 1.44
+  		    string l_filename=dir_itr->path().filename(); // for boost 1.45+
                     to_return.push_back(l_full_path+"/"+l_filename);
                 }
                 else
