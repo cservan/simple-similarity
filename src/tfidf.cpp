@@ -40,16 +40,32 @@ bool mySortingFunction3 ( const pair <size_t, int >& i, const pair <size_t, int 
 //vector<pair <string, vector<float> > >
 bool mySortingFunction4 ( const pair <string, vector<float> >& i, const pair <string, vector<float> >& j )
 {
-// 	cerr << "taille : ";
+  bool to_return=true;
+      try
+  {
     if ( ( int ) i.second.size() > 0 && ( int ) j.second.size() > 0 )
     {
-// 	    cerr << "on compare "+i.first+" "<< i.second.at(0) <<" et "+j.first+" "<< j.second.at(0) << endl;
-        if ( i.second.at ( 0 ) < j.second.at ( 0 ) ) return false;
-        if ( j.second.at ( 0 ) <= i.second.at ( 0 ) ) return true;
+	if ( (int)i.second.size() != 3 ) to_return=false;
+	if ( (int)j.second.size() != 3 ) to_return=true;
+	cerr << i.first << " ||| " << j.first << endl;
+	cerr << (int)i.second.size() << " ||| " << (int)j.second.size() << endl;
+	cerr << i.second.at ( 0 ) << " ||| " << j.second.at ( 0 ) << endl;
+	if ( j.second.at ( 0 ) == i.second.at ( 0 ) ) to_return=true;
+        if ( i.second.at ( 0 ) < j.second.at ( 0 ) ) to_return=false;
+        if ( j.second.at ( 0 ) < i.second.at ( 0 ) ) to_return=true;
     }
-    return true;
+    
+  }
+    catch (int e)
+    {
+      
+	    cerr  << "An exception while sorting. Exception Nr. " << e << endl;
+    }
+    
+    return to_return;
 // 	return j.second < i.second;
 }
+
 void tfidf::sortHash()
 {
     sort ( m_tester.begin(), m_tester.end() );
@@ -398,6 +414,8 @@ string tfidf::printDatasSorted(int nbest)
 {
     stringstream s;
     m_vec_infos_pairs.clear();
+    vector <pair <string, std::vector <float > > > * l_vec_infos_pairs;
+    l_vec_infos_pairs=new vector<pair <string, std::vector <float > > >;
     if (m_debugMode)
     {
 	cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl<<"m_tester.size() : "<<(int)m_tester.size()<<endl<<"vecTfidf.size() : "<<( int ) vecTfidf.size()<<endl<<"END_DEBUGMODE"<<endl;
@@ -448,43 +466,53 @@ string tfidf::printDatasSorted(int nbest)
             l_scores.at ( 2 ) = floatIdf;
             string l_infos = s.str();
             pair <string, vector<float> > l_infos_pair ( l_infos, l_scores );
-            m_vec_infos_pairs.push_back ( l_infos_pair );
+            l_vec_infos_pairs->push_back ( l_infos_pair );
 	    if (m_debugMode)
 	    {
 		cerr << "DEBUGMODE tfidf::printDatasSorted"<<endl;
 		cerr<< l_pos << "\t" ;
 		cerr<< l_infos_pair.first << "\t" <<  l_infos_pair.second.at(0) << " " <<  l_infos_pair.second.at(1)  << " " <<  l_infos_pair.second.at(2) <<endl<<"END_DEBUGMODE"<<endl;
 	    }	    
-// 		l_infos
-// 		sprintf(charTfidf, "%.10f", floatTfidf );
-// 		sprintf(charTf, "%.10f", floatTf );
-// 		sprintf(charIdf, "%.10f", floatIdf );
-
-// 		s  << "\t" << charTfidf << "\t" << charTf << "\t" << charIdf;
-//         }
         s.str ( "" );
-// 	    s  << endl;
     }
     
     s.str ( "" );
-    vector <float> l_scores ( 3, -1.0 );
-    pair <string, vector<float> > l_infos_pair ( "RIEN", l_scores );
-    m_vec_infos_pairs.push_back ( l_infos_pair );
-    if ( ( int ) m_vec_infos_pairs.size() == 0 )
+//     vector <float> l_scores ( 3, -100.0 );
+//     pair <string, vector<float> > l_infos_pair ( "RIEN", l_scores );
+//     l_vec_infos_pairs->push_back ( l_infos_pair );
+    if ( ( int ) l_vec_infos_pairs->size() == 0 )
     {
-        cerr << "ERROR tfidf::printDatasSorted : m_vec_infos_pairs size is null" << endl;
+        cerr << "ERROR tfidf::printDatasSorted : l_vec_infos_pairs size is null" << endl;
         exit ( 1 );
     }
-// 	cerr << "tri de "<< (int)m_vec_infos_pairs.size() <<endl;
-    std::sort ( m_vec_infos_pairs.begin(), m_vec_infos_pairs.end(), mySortingFunction4 );
-    s << "Position\tIds\thash\tmot\tTF.IDF\tTF\tIDF" << endl;
-    for ( int l_pos = 0; l_pos < ( int ) m_vec_infos_pairs.size() && l_pos < nbest; l_pos++ )
+//     std::sort ( l_vec_infos_pairs->begin(), l_vec_infos_pairs->end(), mySortingFunction4 ); // sort enlevé --> ça buggue pour une raison inconnue j'ai pas le temps de chercher pourquoi.
+    for ( int l_pos = 0; l_pos < ( int ) l_vec_infos_pairs->size() ; l_pos++ )
     {
-        if ( m_vec_infos_pairs.at ( l_pos ).first.compare ( "RIEN" ) )
-        {
-            s << l_pos << "\t" << m_vec_infos_pairs.at ( l_pos ).first << "\t" << m_vec_infos_pairs.at ( l_pos ).second.at ( 0 ) << "\t" << m_vec_infos_pairs.at ( l_pos ).second.at ( 1 ) << "\t" << m_vec_infos_pairs.at ( l_pos ).second.at ( 2 ) << endl ;
-        }
+	for ( int l_l_pos = 0; l_l_pos < ( int ) l_vec_infos_pairs->size() ; l_l_pos++ )
+	{
+// 	    if ( l_vec_infos_pairs->at ( l_pos ).first.compare ( "RIEN" ) )
+// 	    {
+	pair <string, std::vector <float > > tmp;
+	if (l_vec_infos_pairs->at(l_pos).second.at(0) > l_vec_infos_pairs->at(l_l_pos).second.at(0))
+	{
+	    tmp=l_vec_infos_pairs->at(l_pos);
+	    l_vec_infos_pairs->at(l_pos)=l_vec_infos_pairs->at(l_l_pos);
+	    l_vec_infos_pairs->at(l_l_pos)=tmp;
+	}
+// 		s << l_pos << "\t" << l_vec_infos_pairs->at ( l_pos ).first << "\t" << l_vec_infos_pairs->at ( l_pos ).second.at ( 0 ) << "\t" << l_vec_infos_pairs->at ( l_pos ).second.at ( 1 ) << "\t" << l_vec_infos_pairs->at ( l_pos ).second.at ( 2 ) << endl ;
+// 	    }
+	}
     }
+    s << "Position\tIds\thash\tmot\tTF.IDF\tTF\tIDF" << endl;
+    for ( int l_pos = 0; l_pos < ( int ) l_vec_infos_pairs->size() && l_pos < nbest; l_pos++ )
+    {
+//         if ( l_vec_infos_pairs->at ( l_pos ).first.compare ( "RIEN" ) )
+//         {
+            s << l_pos << "\t" << l_vec_infos_pairs->at ( l_pos ).first << "\t" << l_vec_infos_pairs->at ( l_pos ).second.at ( 0 ) << "\t" << l_vec_infos_pairs->at ( l_pos ).second.at ( 1 ) << "\t" << l_vec_infos_pairs->at ( l_pos ).second.at ( 2 ) << endl ;
+//         }
+    }
+    m_vec_infos_pairs=(*l_vec_infos_pairs);
+    delete(l_vec_infos_pairs);
     return s.str();
 }
 
@@ -644,7 +672,7 @@ void tfidf::compileDataOkapibm25()
 	    cerr<<"calc_tf: "<< calc_tf <<" = " << m_testerCount.at ( i ).second.at ( 0 ) << " / " <<  m_documentQuerySize <<endl;
 	    cerr<<"calc_tf_bm25: "<< calc_tf_bm25 <<" = 1.0 * " << calc_tf <<" * " << (k+1) << "(" <<(1.0 * calc_tf * (k+1)) << ")" << " / " <<  (calc_tf + k * ( 1-b + b*( m_documentQuerySize / avgDocSize )))<<endl;
 	    cerr<<"calc_tf_bm25: "<< calc_tf_bm25 <<" = 1.0 * " << calc_tf <<" * " << (k+1) << "(" <<(1.0 * calc_tf * (k+1)) << ")" << " / " <<  "(" << calc_tf << "+" << k << "*" << "(" << 1-b << "+" << b<< "* (" << m_documentQuerySize << "/" <<  avgDocSize << ")))"<<endl;
-	    cerr << "calc_idf_bm25: " << calc_idf_bm25 << " = log( " << m_documentSize << " / " << presDoc <<")" <<endl;
+	    cerr << "calc_idf_bm25: " << calc_idf_bm25 << " = log( 1.0 * " << m_documentSize << " - "<< presDoc << " + 0.5 / " << presDoc << " + 0.5 )" <<endl;
 	    cerr<<"END_DEBUGMODE"<<endl;
 	}	
         vecIdf.push_back ( calc_idf_bm25 );

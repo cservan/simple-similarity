@@ -334,8 +334,8 @@ vector <string> list_directory(string dir)
 //           std::cout << dir_itr->path().filename() << "\n";
 //                     to_return.push_back(full_path.string()+"/"+dir_itr->path().filename());
                     string l_full_path=full_path.string();
-//                    string l_filename=dir_itr->path().filename().string(); // for boost 1.44
- 		    string l_filename=dir_itr->path().filename(); // for boost 1.45+
+                   string l_filename=dir_itr->path().filename().string(); // for boost 1.44
+//  		    string l_filename=dir_itr->path().filename(); // for boost 1.45+
                     to_return.push_back(l_full_path+"/"+l_filename);
                 }
                 else
@@ -751,7 +751,6 @@ bool fileByFile_similarity_calculation(parametres l_p )
             l_myIndex.compileComplementDataForOkapi();
         }
         l_tfidf.addDatas(l_myIndexQuery, l_myIndex,l_p.ngramSize, (unsigned long)fileNames.size()+1);
-//         cerr << "Compile data and made the TF.IDF calculation"<<endl;
         if (l_p.bm25)
         {
             l_tfidf.compileDataOkapibm25();
@@ -760,15 +759,9 @@ bool fileByFile_similarity_calculation(parametres l_p )
         {
             l_tfidf.compileData();
         }
-        //     cerr << "Affichage : "<< endl << l_tfidf.printDatas();
-        //     return 0;
         cerr << "Ok !"<<endl;
         cerr << "Ecriture...";
         output << l_tfidf.printDatasSorted(l_p.nbestReturned);
-        //     for (cpt=0; cpt<(int)outputContent.size(); cpt++)
-        //     {
-        // 	output << l_tfidf.printDatas();
-        //     }
         cerr << "Ok !"<<endl;
     }
     if (!l_p.SimilarityCalulation)
@@ -788,14 +781,7 @@ bool fileByFile_similarity_calculation(parametres l_p )
             l_similarity.addTfIdfData(l_tfidf.getContent(l_p.nbestReturned));
             l_similarity.addTfIdfDataIds(l_tfidf.getContentIds(l_p.nbestReturned));
         }
-//         if (!l_p.TfIdfCalculation)
-//         {
-//             l_similarity.addTfIdfData(stringToVector(stringContent," "));
-//         }
-//         else
-//         {
-//             l_similarity.addTfIdfData(l_tfidf.getContent(l_p.nbestReturned));
-//         }
+
         cerr << "Fin d'ajout des données"<<endl;
 
         if (l_p.vectSim)
@@ -831,8 +817,6 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
     vector<vecString> nbestoutputContent;
     vector <string> docNames;
     myIndex l_myIndex;
-//     list_directory(l_p.directoryDataName);
-//     return 0;
     vector<string> stopWords;
     if ((int)l_p.stopWordsList.length()>0)
     {
@@ -849,13 +833,10 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
     }
 
     cerr << "Chargement des docs...\n";
-//     vector<string> fileNames=stringToVector(l_p.inputFileName, ",");
     string fileNames=l_p.directoryDataName;
 //     boost::regex regEx ( "[\\.\\,\\;\\:\\/\\!\?\\(\\)\\[\\]\"\'\\+\\=\\*]+" );
     boost::regex regEx ( "[\\.\\,\\;\\:\\/\\!\?\\(\\)\\[\\]\"\'\\+\\=\\*\\<\\>\\_\\$\\^\\-]+" );
 
-//     for (int i=0; i<(int)fileNames.size(); i++)
-//     {
     cerr <<".";
     ifstream data ( fileNames.c_str() );
     if ( !data.is_open() )
@@ -873,45 +854,6 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
         cpt++;
         docNames.push_back(s.str());
         cerr <<".";
-// 	if ((int)l_p.pos.size()>0)
-// 	{
-// 	    vector <string> tmp=stringToVector(stringContent," ");
-// 	    vector <string> to_keep;
-// 	    for (int k =0; k< (int) l_p.pos.size(); k++)
-// 	    {
-// 		boost::regex regEx ( "([œa-zéàùuïîêè\\-0-9]+\\["+l_p.pos.at(k)+"\\])" );
-// 		for (int i =0; i< (int) tmp.size(); i++)
-// 		{
-// 		    boost::match_results<string::const_iterator> vectorFilter;
-// 	// 	    cerr << "TEST : "<< regEx << "\t"<< tmp.at(i)<<endl;
-// 		    if (boost::regex_match ( tmp.at(i), vectorFilter, regEx, boost::match_default))
-// 		    {
-// 			to_keep.push_back(tmp.at(i));
-// 	// 		cerr << regEx << "\t"<< tmp.at(i)<<endl;
-// 		    }
-// 		}
-// 	    }
-// 	    stringContent=vectorToString(to_keep," ");
-// 	}
-// 	vector<string> to_keep;
-// 	if ((int)stopWords.size()>0)
-// 	{
-// 	    vector <string> tmp=stringToVector(stringContent," ");
-// 	    to_keep.clear();
-// 	    for (int k =0; k< (int) stopWords.size(); k++)
-// 	    {
-//     // 	    boost::regex regEx ( "([œa-zéàùuïîêè\\-0-9]+\\["+l_p.pos.at(k)+"\\])" );
-// 		for (int i =0; i< (int) tmp.size(); i++)
-// 		{
-//     // 		boost::match_results<string::const_iterator> vectorFilter;
-// 		    if (tmp.at(i).compare(stopWords.at(k))!=0)
-// 		    {
-// 			to_keep.push_back(tmp.at(i));
-// 		    }
-// 		}
-// 	    }
-// 	    stringContent=vectorToString(to_keep," ");
-// 	}
         vector <string> analyse_content=stringToVector(stringContent," ");
         vector <string> to_keep_content;
         for (int i =0; i< (int) analyse_content.size(); i++)
@@ -926,21 +868,11 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
         for ( int l_pos = 0; l_pos + l_p.ngramSize <= ( int ) to_keep_content.size(); l_pos++ )
         {
             string l_ngram_test = vectorToString ( subVector ( to_keep_content, l_pos, l_pos + l_p.ngramSize ), " " );
-// 	    myIndex l_myIndex(l_ngram_test, i);
-//     if (!l_p.TfIdfCalculation)
-//     {
-
-//     }
-
-//             l_myIndex.addIndex(l_ngram_test, cpt, l_p.TfIdfCalculation, l_p.SimilarityCalulation);
             l_myIndex.addIndex(l_ngram_test, cpt, false, l_p.SimilarityCalulation); // correction made on TF calculation
-// 	    size_t l_ngramHash = hashValueBoost ( l_ngram_test );
         }
 
-// 	inputContent.push_back(stringContent);
     }
     data.close();
-//     }
     ifstream inputs ( l_p.inputFileName.c_str() );
     if ( !inputs.is_open() )
     {
@@ -954,6 +886,7 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
     {
         myIndex l_myIndexQuery;
         tfidf l_tfidf;
+	l_tfidf.setDebugMode(l_p.debugMode);
         stringContent=lowerCase(buffer)+" ";
         stringstream l_tmp_s;
         l_tmp_s<< cpt;
@@ -968,7 +901,6 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
             if (!boost::regex_match ( analyse.at(i), vectorFilter, regEx, boost::match_default))
             {
                 to_keep.push_back(analyse.at(i));
-                // 	    cerr << analyse.at(i) << " ";
             }
         }
         stringContent=vectorToString(to_keep," ");
@@ -999,12 +931,9 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
                 bool doWekeep=true;
                 for (int k =0; k< (int) stopWords.size(); k++)
                 {
-                    // 	    boost::regex regEx ( "([œa-zéàùuïîêè\\-0-9]+\\["+l_p.pos.at(k)+"\\])" );
-                    // 		boost::match_results<string::const_iterator> vectorFilter;
                     if (tmp.at(i).compare(stopWords.at(k))==0)
                     {
                         doWekeep=false;
-                        //         	    cerr << tmp.at(i) << "|" << stopWords.at(k) << "|" << (int)tmp.at(i).compare(stopWords.at(k)) << endl;
                     }
                 }
                 if (doWekeep)
@@ -1018,28 +947,16 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
         vector <string> l_indexVec=stringToVector(stringContent," ");
         vector <string> l_testVec;
         vector <size_t> l_testVecIds;
-// 	vector <size_t> l_indexVecIds(l_indexVec.size());
-//     to_keep.clear();
 
         for ( int l_pos = 0; l_pos + l_p.ngramSize <= ( int ) l_indexVec.size(); l_pos++ )
         {
             string l_ngram_test = vectorToString ( subVector ( l_indexVec, l_pos, l_pos + l_p.ngramSize ), " " );
-// 	    myIndex l_myIndex(l_ngram_test, i);
             l_myIndexQuery.addIndex(l_ngram_test, 0,true,true);
             l_testVec.push_back(l_ngram_test);
             l_testVecIds.push_back(hashValueBoost(l_ngram_test));
 
-// 	    size_t l_ngramHash = hashValueBoost ( l_ngram_test );
         }
-
-// 	cerr << "DATA :" << endl;
-// 	cerr << l_myIndex.toString() << endl;
-// 	cerr << "QUERY :" << endl;
-// 	cerr << l_myIndexQuery.toString() << endl;
-
-        //     exit(0);
-        //      stringContent+=" ";
-
+	cerr << "Query number " << cpt << " loaded" <<endl;
         output << "========== BEGIN OF SCORES ==========" <<endl;
         if (!l_p.TfIdfCalculation)
         {
@@ -1047,14 +964,11 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
         }
         else
         {
-//             cerr << "DO the TF.IDF calculation"<<endl;
-//             l_tfidf.addDatas(l_myIndexQuery, l_myIndex,l_p.ngramSize, );
             if (l_p.bm25)
             {
                 l_myIndex.compileComplementDataForOkapi();
             }
             l_tfidf.addDatas(l_myIndexQuery,l_myIndex,l_p.ngramSize,(int)docNames.size()+1);
-//             l_tfidf.addDatas(stringContent, inputContent,l_p.ngramSize);
             if (l_p.bm25)
             {
                 l_tfidf.compileDataOkapibm25();
@@ -1063,17 +977,11 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
             {
                 l_tfidf.compileData();
             }
-            //     cerr << "Affichage : "<< endl << l_tfidf.printDatas();
-            //     return 0;
             cerr << "Ok !"<<endl;
             cerr << "Ecriture...";
-            output << "========== BEGIN OF TF.IDF/Okapi bm25 SCORES ==========" <<endl;
+            output << "========== BEGIN OF TF.IDF/Okapi bm25 SCORES QUERY NUMBER "<< cpt <<" ==========" <<endl;
             output << l_tfidf.printDatasSorted(l_p.nbestReturned);
             output << "========== END OF TF.IDF/Okapi bm25 SCORES ==========" <<endl;
-            //     for (cpt=0; cpt<(int)outputContent.size(); cpt++)
-            //     {
-            // 	output << l_tfidf.printDatas();
-            //     }
             cerr << "Ok !"<<endl;
         }
         if (!l_p.SimilarityCalulation)
@@ -1083,7 +991,7 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
         else
         {
             cerr << "Calcul de la similarité :" << endl;
-            output << "========== BEGIN OF SIMILARITY SCORES ==========" <<endl;
+            output << "========== BEGIN OF SIMILARITY SCORES QUERY NUMBER "<< cpt <<" ==========" <<endl;
             output << "Similarity Calculation:\t" << l_tmp_s.str() +"\t"+stringContent<< endl;
             similarity l_similarity;
             l_similarity.setLengthRatio(l_p.lengthRatio);
