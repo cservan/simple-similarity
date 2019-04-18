@@ -18,9 +18,11 @@ Then run ./cbuild.sh to install
 
 or 
 
-``` similarity --SbyS --in inputFileName --data fileDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--nbestTfIdf nbestSize] [--nbestSimilarity nbestSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly] [--bm25] [--vectSim devDir] [--noSort] [--printFullResults] :
+```similarity --SbyS --in inputFileName --data fileDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--nbestTfIdf nbestSize] [--nbestSimilarity nbestSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly] [--bm25] [--vectSim devDir] [--noSort] [--printFullResults]```
 
-                 --debugMode                    : print debug messages 
+Options:
+
+```              --debugMode                    : print debug messages 
                  --SbyS                         : considers each sentence as document in the inputFile and in the Data. 
                  --TfIdfOnly|SimilarityOnly     : calculate only TF.IDF OR calculate only the similarity and take the input as full request
                  --POS nom,adv,adj,...          : if you want to filer the TF.IDF calculation and the similarity calculation by some POS. WARNING: do not use it if documents do not contain any POS!
