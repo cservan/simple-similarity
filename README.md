@@ -1,18 +1,18 @@
-similarity Version 0.6
+# similarity Version 0.6
 
 
-- predicate :
+## predicate :
 	* boost library
 	* cmake
 	* autoconf
 	* automake
 
-- to compile and install :
+## to compile and install :
 
 modify the cbuild.sh and set the -DCMAKE_INSTALL_PREFIX= to the directory you want the tercpp and library be installed (i.e. : /usr).
 Then run ./cbuild.sh to install
 
-Usage : 
+## Usage : 
         similarity --in inputFileName --data directoryDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly]  [--bm25] [--vectSim devDir]:
 or 
         similarity --SbyS --in inputFileName --data fileDataName --out outPutFile [--stopWordsList file] [--lengthRatio] [--ngramSize ngramSize] [--nbestTfIdf nbestSize] [--nbestSimilarity nbestSize] [--POS nom,adv,adj,...] [--TfIdfOnly|SimilarityOnly] [--bm25] [--vectSim devDir] [--noSort] [--printFullResults] :
@@ -27,7 +27,6 @@ or
                   --help                        : print this help message.
 
 
-Enjoy !!!
+## Contact 
 
-Christophe
-(christophe.servan@lium.univ-lemans.fr)
+christophe[_dot_]servan[_at_]gmail.com
