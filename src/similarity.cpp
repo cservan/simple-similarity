@@ -457,6 +457,7 @@ void similarity::sortResults()
 {
 
 //     int indiceMax=0;
+  cerr << "Sorting results" << endl;
     for (int j=0; j< (int)m_similarityResult.size(); j++)
     {
         for (int i=0; i< (int)m_similarityResult.size(); i++)
@@ -493,6 +494,7 @@ void similarity::sortResults(int nbest)
 
 //     int indiceMax=0;
 //     multimap<int,int> research;
+  cerr << "Sorting results nbest" << endl;
     for (int i=0; i< (int)m_similarityResult.size() && i< nbest; i++)
     {
         string tmp_s = m_docNames.at(i);
@@ -862,8 +864,10 @@ void similarity::calculateSimilarity(myIndex& data_index, string s, int ngramSiz
         }
     }
 // 	m_threads.join_all();
+    cerr << "Here again " << m_noSort << " with " << nbest << endl;
     if (!m_noSort)
     {
+    cerr << "Here again " << m_noSort << " with " << nbest << endl;
         sortResults(nbest);
     }
 
@@ -1180,5 +1184,10 @@ float similarity::evaluate_sim(std::vector< float > l_vec_src, std::vector< floa
     return (l_result*100.0);
 }
 
+similarity::similarity()
+{
+    m_noSort=false;
+    m_shortOutputs=false;
+}
 
 

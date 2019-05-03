@@ -1,6 +1,5 @@
 PROJECT(topicAdaptation)
 
-
 include_directories(BEFORE ${CMAKE_SOURCE_DIR}/src)
 # include_directories(BEFORE )
 

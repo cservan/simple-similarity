@@ -36,6 +36,7 @@ using namespace Tools;
 	    bool m_shortOutputs;
 
         public:
+            similarity();
 	    void addTfIdfData(vector<string> vs);
 	    void addTfIdfDataIds(vector<size_t> vs);
 	    void addDocNames(vector<string> vs);

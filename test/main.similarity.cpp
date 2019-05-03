@@ -96,8 +96,8 @@ void readCommandLineArguments ( unsigned int argc, char *argv[] , parametres & p
     p.bm25 = false;
     p.vectSim = false;
     p.devDir = "";
-    p.nbestReturned=50000;
-    p.nbestSimReturned=50000;
+    p.nbestReturned=10;
+    p.nbestSimReturned=10;
 //     p.nbestmodFile = "";
 //     p.nbestunmodFile="";
 //     p.listeFile="";
@@ -335,7 +335,7 @@ vector <string> list_directory(string dir)
 //                     to_return.push_back(full_path.string()+"/"+dir_itr->path().filename());
                     string l_full_path=full_path.string();
 //                   string l_filename=dir_itr->path().filename().string(); // for boost 1.44
-  		    string l_filename=dir_itr->path().filename(); // for boost 1.45+
+  		    string l_filename=dir_itr->path().filename().string(); // for boost 1.6+
                     to_return.push_back(l_full_path+"/"+l_filename);
                 }
                 else
@@ -1012,7 +1012,7 @@ bool sentenceBysentence_similarity_calculation(parametres l_p )
                 l_similarity.addTfIdfDataIds(l_testVecIds);
             }
             l_similarity.calculateSimilarity(l_myIndex, stringContent,l_p.ngramSize, l_p.nbestSimReturned);
-
+            cerr << "******************* Here we are **************** " << endl;
             if (l_p.printFullResults)
             {
                 output << l_similarity.printResults(l_p.nbestSimReturned);
